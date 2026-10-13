@@ -1,0 +1,66 @@
+import type { Outreach } from "./types";
+
+// WhatsApp drafts waiting for approval. `leadId` drafts create a pipeline deal when approved;
+// `dealId` drafts add the message to an existing deal's chat.
+export const OUTREACH: Outreach[] = [
+  {
+    id: "o1",
+    channel: "wa",
+    title: "Valentina Ospina — first touch",
+    meta: "From: Meta Lead Ads · Torres del Parque campaign",
+    goal: "Reply within minutes and learn her monthly budget",
+    to: "Valentina Ospina",
+    leadId: "l1",
+    body: "Hi Valentina! 😊 This is Sara from GINGGA, the sales team at Torres del Parque. Thanks for your interest in the 2-bedroom apartments in Laureles.\n\nTo send you the right options: what monthly budget are you comfortable with for the mortgage?",
+  },
+  {
+    id: "o2",
+    channel: "wa",
+    title: "Juliana Arango — reply about availability",
+    meta: "From: inbound WhatsApp · asked about the 3-bedroom",
+    goal: "Confirm availability and move to a visit",
+    to: "Juliana Arango",
+    dealId: "d1",
+    body: "Hi Juliana! 😊 Sara from GINGGA. Yes, we still have 3-bedroom apartments available in Altos de Niza, with delivery in December 2027.\n\nWould you like me to send the price list, or would you prefer to see the model apartment this week? 🏠",
+  },
+  {
+    id: "o3",
+    channel: "wa",
+    title: "Santiago Osorio — visit confirmation",
+    meta: "From: visit booked for Thursday 10:00 AM",
+    goal: "Confirm the visit and reduce no-shows",
+    to: "Santiago Osorio",
+    dealId: "d6",
+    body: "Hi Santiago! 👋 Quick reminder: your visit to the Casas del Bosque model house is tomorrow, Thursday at 10:00 AM.\n\nI will wait for you and your wife at the sales office. The address and a map pin are below 📍 Need to change the time? Just tell me.",
+  },
+  {
+    id: "o4",
+    channel: "wa",
+    title: "Julián Pineda — proposal follow-up",
+    meta: "From: proposal for Apt 1102 opened, no reply",
+    goal: "Get an answer on the proposal without pressure",
+    to: "Julián Pineda",
+    dealId: "d8",
+    body: "Hi Julián! 😊 Hope you are well. I wanted to check if you and your partner had a chance to look at the proposal for Apt 1102.\n\nIf useful, I can adjust the instalment plan or send a comparison with the 2-bedroom on floor 9. What would help you decide?",
+  },
+  {
+    id: "o5",
+    channel: "wa",
+    title: "Diana Ruiz — nurturing check-in",
+    meta: "From: next touch Nov 3 · waiting until January",
+    goal: "Keep her warm with project progress",
+    to: "Diana Ruiz",
+    dealId: "d14",
+    body: "Hi Diana! 🏗️ Torres del Parque keeps moving: the tower is now at floor 14 and the model apartment has new finishes.\n\nI know you are thinking about January. Do you want me to send photos, or save a unit for you in the meantime?",
+  },
+  {
+    id: "o6",
+    channel: "call",
+    title: "Daniela Torres — call script",
+    meta: "From: Property portal · subsidy and parking questions",
+    goal: "Confirm subsidy status and book a visit",
+    to: "Daniela Torres",
+    leadId: "l3",
+    body: "OPENING — “Hi Daniela, this is Sara from Parques de Sabaneta. You asked about the subsidy and parking, do you have two minutes?”\n\nQUESTION — “Do you already have your subsidy letter, or should we explain how to apply?”\n\nCLOSE — “I can book you a visit with our advisor on Saturday. Does the morning work?”",
+  },
+];
