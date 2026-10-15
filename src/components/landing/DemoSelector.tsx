@@ -27,7 +27,7 @@ export function DemoSelector({ videos }: Props) {
   };
 
   return (
-    <section id="demo" className="section--dark demo">
+    <section id="demo" className="demo">
       <div className="container demo__inner">
         <div className="demo__head">
           <h2 className="h2">See what happens after a lead comes in.</h2>

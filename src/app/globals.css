@@ -1,5 +1,5 @@
 :root {
-  --navy: #212238;
+  --navy: #222338;
   --navy-deep: #1a1b2e;
   --navy-card: #2c2d48;
   --navy-bubble: #3a3b5a;
@@ -11,9 +11,10 @@
   --violet: #bf86ff;
   --violet-deep: #8b4fe0;
   --lilac: #f2eaff;
+  --mint: #eff8f7;
   --cyan: #96f2f7;
   --cyan-soft: #ddfbfd;
-  --text: #212238;
+  --text: #222338;
   --text-2: #3a3b52;
   --text-3: #55566b;
   --text-4: #6a6b80;
@@ -23,7 +24,7 @@
   --line: #e3e2ee;
   --line-soft: #ecebf3;
   --gutter: clamp(20px, 5vw, 48px);
-  --section-y: clamp(72px, 9vw, 128px);
+  --section-y: clamp(56px, 8vw, 96px);
 }
 
 *,
@@ -89,6 +90,7 @@ a:focus-visible {
 
 .section {
   padding-block: var(--section-y);
+  background: var(--white);
 }
 
 .section--dark {
@@ -601,7 +603,8 @@ a:focus-visible {
 /* ---------- Footer ---------- */
 
 .site-footer {
-  background: var(--navy-deep);
+  background: var(--navy);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--on-dark);
 }
 
@@ -679,6 +682,12 @@ button:focus-visible {
 
 .section--dark .btn:focus-visible {
   outline-color: var(--white);
+}
+
+/* Turquoise outlines vanish on pale backgrounds; use navy there. */
+.section :focus-visible,
+.demo :focus-visible {
+  outline-color: var(--navy);
 }
 
 .link-underline .icon {
@@ -919,6 +928,7 @@ button:focus-visible {
   background: var(--navy-deep);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 24px;
+  box-shadow: 0 24px 48px rgba(34, 35, 56, 0.2);
 }
 
 .demo-video video {
@@ -951,11 +961,20 @@ button:focus-visible {
   font-size: 17px;
 }
 
+.demo {
+  background: var(--mint);
+  color: var(--navy);
+}
+
+.demo .lead {
+  color: var(--text-2);
+}
+
 .demo__inner {
   display: flex;
   flex-direction: column;
   gap: 28px;
-  padding-block: clamp(32px, 4vw, 48px) var(--section-y);
+  padding-block: var(--section-y);
 }
 
 .demo__head {
@@ -971,8 +990,8 @@ button:focus-visible {
   gap: 6px;
   padding: 6px;
   border-radius: 999px;
-  background: var(--navy-card);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--white);
+  border: 1px solid rgba(34, 35, 56, 0.14);
 }
 
 .demo__tab {
@@ -981,7 +1000,7 @@ button:focus-visible {
   border: 0;
   border-radius: 999px;
   background: transparent;
-  color: var(--on-dark-2);
+  color: rgba(34, 35, 56, 0.78);
   font: inherit;
   font-size: 16px;
   font-weight: 700;
@@ -989,12 +1008,18 @@ button:focus-visible {
 }
 
 .demo__tab:hover {
-  color: var(--white);
+  background: rgba(34, 35, 56, 0.08);
+  color: var(--navy);
 }
 
 .demo__tab[aria-selected="true"] {
-  background: var(--cyan);
-  color: var(--navy);
+  background: var(--navy);
+  color: var(--white);
+}
+
+.demo__tab:focus-visible {
+  outline: 3px solid var(--navy);
+  outline-offset: 2px;
 }
 
 .demo__panel {
@@ -1038,7 +1063,17 @@ button:focus-visible {
 .demo__caption p {
   font-size: 19px;
   line-height: 1.45;
-  color: var(--on-dark-2);
+  color: var(--text-2);
+}
+
+.demo__caption .link-underline {
+  color: var(--navy);
+  text-decoration-color: var(--navy);
+}
+
+.demo__caption .link-underline:hover {
+  color: var(--navy);
+  text-decoration-thickness: 3px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -1077,8 +1112,8 @@ button:focus-visible {
   gap: 10px;
   padding: 28px;
   border-radius: 24px;
-  background: var(--white);
-  border: 1px solid var(--line);
+  background: var(--mint);
+  border: 1px solid rgba(34, 35, 56, 0.08);
 }
 
 .card h3 {
@@ -1099,7 +1134,7 @@ button:focus-visible {
 }
 
 .managed {
-  background: var(--lilac);
+  background: var(--white);
 }
 
 .steps--three li {
@@ -1109,8 +1144,7 @@ button:focus-visible {
 /* ---------- Plans (services tiers) ---------- */
 
 .services {
-  background: var(--white);
-  border-top: 1px solid var(--line-soft);
+  background: var(--mint);
 }
 
 .plans__head {
@@ -1352,7 +1386,7 @@ button:focus-visible {
 }
 
 .handoff {
-  background: var(--lilac);
+  background: var(--mint);
 }
 
 .docs {
