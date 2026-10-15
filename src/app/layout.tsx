@@ -11,9 +11,9 @@ const dmSans = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "GINGGA — Turn more leads into customers",
+  title: "GINGGA | More sales from the leads you already have",
   description:
-    "GINGGA builds and operates AI-powered sales systems that qualify leads, automate follow-up and help your sales team close more of the demand you already have.",
+    "AI agents that respond, qualify and follow up, so you can focus on closing. Set up, managed and continuously improved by GINGGA.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
