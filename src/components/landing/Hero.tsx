@@ -1,22 +1,30 @@
 import { demoHref } from "@/lib/demo";
+import { HeroProduct } from "./HeroProduct";
+import { Icon } from "./Icon";
 
 export function Hero() {
   return (
-    <section className="section--dark hero hero--compact">
+    <section className="section--dark hero hero--home">
       <div className="container hero__inner">
         <div className="hero__copy">
-          <h1>More sales from the leads you already have.</h1>
+          <h1>
+            <span className="hero__accent">More sales.</span> <span className="hero__rest">From the leads you already have.</span>
+          </h1>
           <p className="hero__sub">AI agents that respond, qualify and follow up, so you can focus on closing.</p>
-          <div className="hero__actions">
-            <a className="btn" href={demoHref()}>
-              Book a demo
-            </a>
-            <a className="link-underline" href="#demo">
-              See it in action
-            </a>
+          <div className="hero__cta">
+            <div className="hero__actions">
+              <a className="btn" href={demoHref()}>
+                Book a demo
+              </a>
+              <a className="btn btn--outline" href="#demo">
+                <Icon name="play" />
+                See it in action
+              </a>
+            </div>
+            <p className="hero__service">Set up and managed for you.</p>
           </div>
-          <p className="hero__note">Set up, managed and continuously improved by GINGGA.</p>
         </div>
+        <HeroProduct />
       </div>
     </section>
   );

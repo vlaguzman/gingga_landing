@@ -13,6 +13,9 @@ export function IconSprite() {
       <symbol id="i-arrow" viewBox="0 0 16 16">
         <path d="M3 8h10M9 4l4 4-4 4" />
       </symbol>
+      <symbol id="i-play" viewBox="0 0 16 16">
+        <path d="M5 3.2v9.6L12.6 8z" />
+      </symbol>
     </svg>
   );
 }
