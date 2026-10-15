@@ -1345,12 +1345,44 @@ button:focus-visible {
 .lead-card__label {
   font-size: 13px;
   font-weight: 500;
-  color: var(--text-3);
+  color: #526174;
 }
 
 .lead-card__label--dark {
-  color: var(--on-dark-3);
   padding: 0 4px;
+}
+
+.lead-card .summary__grid dt {
+  color: #526174;
+}
+
+/* Light conversation card, matched to the adjacent handoff card. */
+.chat--excerpt {
+  background: var(--white);
+  border: 1px solid #d8e5e5;
+  color: #222338;
+}
+
+.chat--excerpt .chat__title {
+  color: #222338;
+}
+
+.chat--excerpt .chat__channel {
+  background: #f0f3f7;
+  color: #526174;
+  border-color: #d8e5e5;
+}
+
+.chat--excerpt .bubble {
+  color: #222338;
+}
+
+.chat--excerpt .bubble--in {
+  background: #f0f3f7;
+}
+
+.chat--excerpt .bubble--out {
+  background: #d5f5f3;
 }
 
 .lead-card__body {
