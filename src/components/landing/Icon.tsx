@@ -1,4 +1,4 @@
-export type IconName = "drop" | "check" | "arrow";
+export type IconName = "drop" | "check" | "arrow" | "chevron" | "play";
 
 export function Icon({ name }: { name: IconName }) {
   return (

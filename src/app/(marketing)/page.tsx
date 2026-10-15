@@ -1,35 +1,49 @@
-import { Compare } from "@/components/landing/Compare";
-import { Connect } from "@/components/landing/Connect";
-import { Cta } from "@/components/landing/Cta";
-import { AiHumans } from "@/components/landing/AiHumans";
-import { Footer } from "@/components/landing/Footer";
-import { Header } from "@/components/landing/Header";
+import type { Metadata } from "next";
+import { BenefitCards } from "@/components/landing/BenefitCards";
+import { DemoCta } from "@/components/landing/DemoCta";
+import { DemoSelector } from "@/components/landing/DemoSelector";
 import { Hero } from "@/components/landing/Hero";
-import { IconSprite } from "@/components/landing/IconSprite";
-import { Measure } from "@/components/landing/Measure";
-import { Plans } from "@/components/landing/Plans";
-import { Problem } from "@/components/landing/Problem";
-import { Process } from "@/components/landing/Process";
-import { System } from "@/components/landing/System";
+import { ManagedService } from "@/components/landing/ManagedService";
+import { Services } from "@/components/landing/Services";
+import { resolveVideo } from "@/lib/video-assets";
 
-export default function LandingPage() {
+export const metadata: Metadata = {
+  title: "GINGGA | More sales from the leads you already have",
+  description:
+    "AI agents that respond, qualify and follow up, so you can focus on closing. Set up, managed and continuously improved by GINGGA.",
+};
+
+const benefits = [
+  {
+    title: "Respond while interest is fresh.",
+    text: "Start the conversation when a lead gets in touch, even when you're busy.",
+  },
+  {
+    title: "Make follow-up consistent.",
+    text: "Keep track of unanswered questions, missing information and the next step.",
+  },
+  {
+    title: "Step in with context.",
+    text: "See what each prospect needs and what has already been discussed.",
+  },
+];
+
+export default function HomePage() {
+  const videos = {
+    "student-recruitment": resolveVideo("student-recruitment"),
+    "property-sales": resolveVideo("property-sales"),
+  };
   return (
     <>
-      <IconSprite />
-      <Header />
-      <main>
-        <Hero />
-        <Problem />
-        <Connect />
-        <System />
-        <Compare />
-        <Plans />
-        <Measure />
-        <AiHumans />
-        <Process />
-        <Cta />
-      </main>
-      <Footer />
+      <Hero />
+      <DemoSelector videos={videos} />
+      <BenefitCards heading="Keep more opportunities moving." items={benefits} />
+      <ManagedService />
+      <Services />
+      <DemoCta
+        title="What happens to your leads after the first enquiry?"
+        lead="Show us your current process. We'll show you where GINGGA could help."
+      />
     </>
   );
 }
