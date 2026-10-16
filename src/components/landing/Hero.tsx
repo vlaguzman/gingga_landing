@@ -1,5 +1,5 @@
 import { demoHref } from "@/lib/demo";
-import { HeroProduct } from "./HeroProduct";
+import { HeroVideo } from "./HeroVideo";
 import { Icon } from "./Icon";
 
 export function Hero() {
@@ -24,7 +24,7 @@ export function Hero() {
             <p className="hero__service">Set up and managed for you.</p>
           </div>
         </div>
-        <HeroProduct />
+        <HeroVideo />
       </div>
     </section>
   );
