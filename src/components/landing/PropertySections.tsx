@@ -21,7 +21,7 @@ export function CallsAndMeetings() {
         <div className="pair pair--top">
           <ul className="cards cards--stack">
             {calls.map((c) => (
-              <li key={c.title} className="card">
+              <li key={c.title} className="feature-card">
                 <h3>{c.title}</h3>
                 <p>{c.text}</p>
               </li>
