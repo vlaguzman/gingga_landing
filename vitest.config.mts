@@ -32,6 +32,8 @@ export default defineConfig({
         "src/**/*.test.{ts,tsx}",
         "src/**/*.d.ts",
         "src/data/app/types.ts",
+        // Declarative drizzle table definitions, no logic to test.
+        "src/db/schema.ts",
       ],
       thresholds: { lines: 80, statements: 80, functions: 80, branches: 70 },
     },
