@@ -678,6 +678,11 @@
   top: 10px;
   left: 12px;
   z-index: 2;
+  width: auto;
+  gap: 6px;
+  padding: 0 12px 0 10px;
+  font-size: 13px;
+  font-weight: 600;
   background: var(--a-card);
   border: 1px solid var(--a-line);
 }
@@ -693,7 +698,7 @@
   }
 
   .app .work-row.chat-hidden .ws-crumb {
-    padding-left: 60px;
+    padding-left: 96px;
   }
 }
 

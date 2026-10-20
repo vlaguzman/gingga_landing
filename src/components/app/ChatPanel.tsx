@@ -84,7 +84,7 @@ export function ChatPanel({
       <button type="button" className="chat-close" onClick={onClose} aria-label="Close chat">
         ✕
       </button>
-      <button type="button" className="chat-collapse" onClick={onCollapse} aria-label="Collapse chat">
+      <button type="button" className="chat-collapse" onClick={onCollapse} aria-label="Collapse chat" title="Collapse chat">
         <AppIcon name="panel" size={16} />
       </button>
       <div className="th-scroll" ref={scrollRef}>

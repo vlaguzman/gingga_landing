@@ -160,8 +160,15 @@ function Shell({ children }: { children: ReactNode }) {
       {mobChat && <div className="chat-scrim" onClick={() => setMobChat(false)} aria-hidden="true" />}
       <div className={`work-row${chatHidden ? " chat-hidden" : ""}`}>
         {chatHidden && (
-          <button type="button" className="chat-expand" onClick={() => setChatHidden(false)} aria-label="Expand chat">
-            <AppIcon name="panel" size={16} />
+          <button
+            type="button"
+            className="chat-expand"
+            onClick={() => setChatHidden(false)}
+            aria-label="Expand chat"
+            title="Expand chat with GINGGA"
+          >
+            <AppIcon name="chat" size={15} />
+            <span>Chat</span>
           </button>
         )}
         <ChatPanel width={chatW} onClose={() => setMobChat(false)} onCollapse={() => setChatHidden(true)} />
