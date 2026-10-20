@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { STAGES, VIA } from "@/data/app/chips";
 import { DEALS, DEFAULT_REPLIES } from "@/data/app/deals";
 import { LEADS } from "@/data/app/leads";
-import { NAV, SECTION_HREF, USER } from "@/data/app/nav";
+import { NAV, SECTION_HREF } from "@/data/app/nav";
 import { OUTREACH } from "@/data/app/outreach";
 import { PLAYBOOK_CLAIMS } from "@/data/app/playbook";
 import type {
@@ -154,19 +154,21 @@ function pillsForSection(
   }
 }
 
-export function AppProvider({ children }: { children: ReactNode }) {
+export type AppUser = { name: string; email: string };
+
+export function AppProvider({ children, user: account }: { children: ReactNode; user: AppUser }) {
   const router = useRouter();
   const pathname = usePathname();
   const section = sectionFromPath(pathname);
 
-  const initials = USER.name
+  const initials = account.name
     .trim()
     .split(/\s+/)
     .map((w) => w[0])
     .slice(0, 2)
     .join("")
     .toUpperCase();
-  const user = { ...USER, initials };
+  const user = { ...account, initials };
 
   const [msgs, setMsgs] = useState<ChatMessage[]>([]);
   const [leadSel, setLeadSel] = useState<string | null>(null);
