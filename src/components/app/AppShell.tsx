@@ -19,6 +19,7 @@ function Shell({ children }: { children: ReactNode }) {
   const [mobNav, setMobNav] = useState(false);
   const [mobChat, setMobChat] = useState(false);
   const [chatW, setChatW] = useState(42);
+  const [chatHidden, setChatHidden] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -157,8 +158,13 @@ function Shell({ children }: { children: ReactNode }) {
       </aside>
 
       {mobChat && <div className="chat-scrim" onClick={() => setMobChat(false)} aria-hidden="true" />}
-      <div className="work-row">
-        <ChatPanel width={chatW} onClose={() => setMobChat(false)} />
+      <div className={`work-row${chatHidden ? " chat-hidden" : ""}`}>
+        {chatHidden && (
+          <button type="button" className="chat-expand" onClick={() => setChatHidden(false)} aria-label="Expand chat">
+            <AppIcon name="panel" size={16} />
+          </button>
+        )}
+        <ChatPanel width={chatW} onClose={() => setMobChat(false)} onCollapse={() => setChatHidden(true)} />
         <div className="col-resizer" onMouseDown={startDrag} role="separator" aria-orientation="vertical" />
         <section className="ws-col" aria-label={crumbHere}>
           <nav className="ws-crumb" aria-label="Breadcrumb">
