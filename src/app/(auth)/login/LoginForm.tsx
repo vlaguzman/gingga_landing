@@ -49,6 +49,12 @@ export function LoginForm() {
         )}
       </div>
 
+      {state.error && (
+        <p className="login__error" role="alert">
+          {state.error}
+        </p>
+      )}
+
       <button className="btn login__submit" type="submit" disabled={pending}>
         {pending ? "Signing in…" : "Sign in"}
       </button>

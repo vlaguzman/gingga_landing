@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
 
 export type LoginState = {
   error?: string;
@@ -10,10 +11,6 @@ export type LoginState = {
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-/**
- * Front-end simulation: validates the input and sends the user to the demo workspace.
- * Swap the body for a real credential check once an auth backend exists.
- */
 export async function login(_prev: LoginState, formData: FormData): Promise<LoginState> {
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
@@ -24,5 +21,19 @@ export async function login(_prev: LoginState, formData: FormData): Promise<Logi
 
   if (fieldErrors.email || fieldErrors.password) return { fieldErrors, email };
 
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+  if (error) {
+    // Same message for wrong email and wrong password, to avoid account enumeration.
+    return { error: "Invalid email or password.", email };
+  }
+
   redirect("/today-dashboard");
+}
+
+export async function logout() {
+  const supabase = await createClient();
+  await supabase.auth.signOut();
+  redirect("/login");
 }
