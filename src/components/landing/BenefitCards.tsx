@@ -7,7 +7,7 @@ export function BenefitCards({ heading, items }: { heading: string; items: reado
         <h2 className="h2 section-title">{heading}</h2>
         <ul className="cards">
           {items.map((item) => (
-            <li key={item.title} className="card">
+            <li key={item.title} className="feature-card">
               <h3>{item.title}</h3>
               <p>{item.text}</p>
             </li>

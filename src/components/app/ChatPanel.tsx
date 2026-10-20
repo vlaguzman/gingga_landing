@@ -32,7 +32,15 @@ function ToolMsg({ msg }: { msg: ToolMessage }) {
   );
 }
 
-export function ChatPanel({ width, onClose }: { width: number; onClose: () => void }) {
+export function ChatPanel({
+  width,
+  onClose,
+  onCollapse,
+}: {
+  width: number;
+  onClose: () => void;
+  onCollapse: () => void;
+}) {
   const { msgs, send, pillsFor, user } = useApp();
   const [input, setInput] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -75,6 +83,9 @@ export function ChatPanel({ width, onClose }: { width: number; onClose: () => vo
     <section className="chat-col" style={{ width: `${width}%` }} aria-label="Chat with GINGGA">
       <button type="button" className="chat-close" onClick={onClose} aria-label="Close chat">
         ✕
+      </button>
+      <button type="button" className="chat-collapse" onClick={onCollapse} aria-label="Collapse chat" title="Collapse chat">
+        <AppIcon name="panel" size={16} />
       </button>
       <div className="th-scroll" ref={scrollRef}>
         {msgs.length === 0 ? (

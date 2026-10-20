@@ -1043,7 +1043,7 @@ button:focus-visible {
   gap: 20px;
 }
 
-.card {
+.feature-card {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -1053,14 +1053,14 @@ button:focus-visible {
   border: 1px solid rgba(34, 35, 56, 0.08);
 }
 
-.card h3 {
+.feature-card h3 {
   font-size: 22px;
   line-height: 1.2;
   letter-spacing: -0.015em;
   font-weight: 700;
 }
 
-.card p {
+.feature-card p {
   font-size: 17px;
   line-height: 1.55;
   color: var(--text-2);
