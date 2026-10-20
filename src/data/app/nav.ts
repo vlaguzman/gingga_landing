@@ -23,7 +23,5 @@ export const SECTION_HREF = Object.fromEntries(NAV.map((n) => [n.id, n.href])) a
 
 export const SECTION_LABEL = Object.fromEntries(NAV.map((n) => [n.id, n.label])) as Record<SectionId, string>;
 
-export const USER = { name: "Sara Mejía", email: "sara@gingga.com" };
-
 /** Fixed "today" for the mock data, so server and client render the same text. */
 export const MOCK_TODAY = "Wed, Aug 20";

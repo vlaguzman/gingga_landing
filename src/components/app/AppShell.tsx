@@ -5,7 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { NAV, SECTION_LABEL } from "@/data/app/nav";
 import { AppIcon } from "./AppIcon";
-import { AppProvider, useApp } from "./AppProvider";
+import { logout } from "@/app/(auth)/login/actions";
+import { AppProvider, useApp, type AppUser } from "./AppProvider";
 import { ChatPanel } from "./ChatPanel";
 
 const CHAT_MIN = 24;
@@ -133,9 +134,11 @@ function Shell({ children }: { children: ReactNode }) {
                 <AppIcon name="gear" size={15} /> Settings
               </button>
               <hr />
-              <Link href="/" onClick={() => setMenuOpen(false)}>
-                <AppIcon name="exit" size={15} /> Sign out
-              </Link>
+              <form action={logout}>
+                <button type="submit">
+                  <AppIcon name="exit" size={15} /> Sign out
+                </button>
+              </form>
             </div>
           )}
           <button
@@ -208,9 +211,9 @@ function Shell({ children }: { children: ReactNode }) {
   );
 }
 
-export function AppShell({ children }: { children: ReactNode }) {
+export function AppShell({ children, user }: { children: ReactNode; user: AppUser }) {
   return (
-    <AppProvider>
+    <AppProvider user={user}>
       <Shell>{children}</Shell>
     </AppProvider>
   );
