@@ -1,0 +1,39 @@
+name: Migrate production database
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "drizzle/**"
+      - ".github/workflows/migrate-prod.yml"
+  workflow_dispatch:
+
+# Never run two migrations at once, and never cancel one that is in flight.
+concurrency:
+  group: migrate-prod
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # drizzle-kit is a devDependency, so install everything.
+      - run: npm ci
+
+      # Supabase SESSION pooler URL (port 5432), password URL-encoded (@ -> %40).
+      # dotenv does not override variables already in the environment.
+      - name: Apply migrations
+        run: npm run db:migrate
+        env:
+          DATABASE_URL: ${{ secrets.PROD_DATABASE_URL }}
