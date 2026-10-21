@@ -7,3 +7,8 @@ dist/
 .next/
 next-env.d.ts
 *.tsbuildinfo
+
+# test output
+/coverage
+/test-results
+/playwright-report
