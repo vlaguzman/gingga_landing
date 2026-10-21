@@ -41,7 +41,7 @@ There is no browser client: no `createBrowserClient` file exists and nothing nee
 ## Env var names (names only)
 - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`: read with `!` in `server.ts` and `proxy.ts` (no missing-value guard; a missing value fails at the first Supabase call).
 - `DATABASE_URL`: used by `src/db/index.ts` (throws at import when missing). `NEXT_PUBLIC_*` is frozen at build time; rebuild after changing it.
-- `.env.*` is git-ignored except `.env.example`.
+- `.env.*` is git-ignored except `.env.example` (names only, never real values).
 
 ## Checklist: new protected route or action
 - [ ] Route: add its prefix to `PROTECTED_PREFIXES` in `src/lib/supabase/proxy.ts` and its test in `proxy.test.ts`.
