@@ -1,6 +1,6 @@
 ---
 name: hostinger-deploy
-description: Constraints and checklist for deploying this Next.js 16 app to a Hostinger Node.js web app (old glibc, WASM SWC fallback, webpack build, unoptimized images, DNS notes). Use when changing next.config.mjs, package.json scripts or dependencies, build/start settings, environment variables on the host, or when a Hostinger build or domain misbehaves.
+description: Constraints and checklist for deploying this Next.js 16 app to a Hostinger Node.js web app (old glibc, WASM SWC fallback, webpack build, unoptimized images, DNS notes). Use when changing next.config.mjs, package.json scripts or dependencies, build/start settings, environment variables on the host (DATABASE_URL, Supabase), production migrations, or when a Hostinger build or domain misbehaves.
 ---
 
 # Deploying to Hostinger (Node.js web app)
@@ -29,6 +29,9 @@ All facts below were verified in this project. Do not extend them with guesses; 
 3. Do not add a custom `webpack` config casually: the build already runs under webpack, but a plugin that needs native code will fail on the host.
 4. Environment variables are set in the Hostinger panel, never committed. Document names only, never values. `NEXT_PUBLIC_*` values are inlined at build time (`02-guides/environment-variables.md`), so they must exist in the panel BEFORE the build runs and need a rebuild when changed. Server-only variables are read at runtime.
 5. `.env.local` is local only. Do not rely on it for production behaviour.
+5a. Variables to set in the panel (names only): `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `DATABASE_URL`. `DATABASE_URL` is needed at BUILD time too: `src/db/index.ts` throws "DATABASE_URL is not set" on import, and `next build` fails collecting page data for the workspace routes (first reported as `/integrations`). Use the transaction-pooler URL (the client sets `prepare: false`).
+5b. The Postgres client `postgres` (v3.x) is pure JS: its `package.json` has no install/postinstall script and no dependencies, so it is safe for the old-glibc host. `drizzle-orm` is pure JS too. `drizzle-kit` is a devDependency used only for migrations.
+5c. Production migrations are NOT run by the host or the build. `.github/workflows/migrate-prod.yml` runs `npm run db:migrate` on push to `main` when `drizzle/**` changes (or manual dispatch), using the `PROD_DATABASE_URL` GitHub secret. Merge the migration before (or with) code that needs it.
 6. `allowedDevOrigins` in `next.config.mjs` is dev-only; leave it.
 7. Use `next/image` as today: `unoptimized` means files in `public/assets/` are served as-is, so compress them before committing (mp4/jpg/png sizes matter).
 8. Dependency or Next upgrades are a deploy risk: re-run the full pre-push checklist and deploy to check.
@@ -36,10 +39,11 @@ All facts below were verified in this project. Do not extend them with guesses; 
 ## Pre-push checklist
 ```bash
 npm run typecheck
-npm run build                    # real build, webpack
+npm test
+npm run build                    # real build, webpack; needs DATABASE_URL (.env.local)
 NEXT_TEST_WASM=1 npm run build   # simulates the WASM SWC fallback used on Hostinger
 ```
-All three must pass before pushing to `main` (a push to `main` triggers the host build). After `NEXT_TEST_WASM=1`, run a normal `npm run build` again if you plan to start locally.
+All four must pass before pushing to `main` (a push to `main` triggers the host build). After `NEXT_TEST_WASM=1`, run a normal `npm run build` again if you plan to start locally.
 
 ## DNS and domain notes
 - The domain uses Hostinger nameservers (dns-parking). Apex record is an ALIAS `@ -> gingga.com.cdn.hstgr.net`.
@@ -53,5 +57,6 @@ All three must pass before pushing to `main` (a push to `main` triggers the host
 - Build fails mentioning Turbopack/bindings: the build script lost `--webpack`.
 - Config load error: `next.config` was renamed to `.ts`.
 - Missing Supabase/public values in the browser after deploy: `NEXT_PUBLIC_*` was set after the build; rebuild.
+- Build fails with "DATABASE_URL is not set": add it to the panel (and `.env.local` locally).
 
 Related: `nextjs-app-router` (config and env rules), `supabase-auth-ssr` (env var names).
