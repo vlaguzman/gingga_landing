@@ -3,6 +3,7 @@ dist/
 .DS_Store
 .env
 .env.*
+.atl/*
 !.env.example
 .next/
 next-env.d.ts
