@@ -10,6 +10,8 @@ import {
   uniqueIndex,
   uuid,
   date,
+  integer,
+  boolean,
 } from "drizzle-orm/pg-core";
 import { authUsers } from "drizzle-orm/supabase";
 
@@ -28,6 +30,25 @@ export const campaignStatus = pgEnum("campaign_status", [
 export const messageDirection = pgEnum("message_direction", [
   "inbound",
   "outbound",
+]);
+
+export const playbookGroup = pgEnum("playbook_group", [
+  "who_we_target",
+  "what_works",
+  "objections",
+  "process",
+]);
+
+export const playbookProvenance = pgEnum("playbook_provenance", [
+  "learned",
+  "you",
+  "uploaded",
+]);
+
+export const playbookSourceStatus = pgEnum("playbook_source_status", [
+  "processing",
+  "ready",
+  "failed",
 ]);
 
 const timestamps = {
@@ -133,4 +154,49 @@ export const messages = pgTable(
     ...timestamps,
   },
   (t) => [index("messages_lead_id_created_at_idx").on(t.leadId, t.createdAt)],
+).enableRLS();
+
+// Documents a user uploads to teach the agents. The file lives in the private
+// Supabase Storage bucket "playbook-sources" at {brandId}/{id}/{filename}.
+export const playbookSources = pgTable(
+  "playbook_sources",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    brandId: uuid("brand_id")
+      .notNull()
+      .references(() => brands.id, { onDelete: "restrict" }),
+    filename: text("filename").notNull(),
+    mimeType: text("mime_type").notNull(),
+    sizeBytes: integer("size_bytes").notNull(),
+    storagePath: text("storage_path").notNull(),
+    extractedText: text("extracted_text"),
+    status: playbookSourceStatus("status").notNull().default("processing"),
+    errorMessage: text("error_message"),
+    ...timestamps,
+  },
+  (t) => [index("playbook_sources_brand_id_idx").on(t.brandId)],
+).enableRLS();
+
+export const playbookClaims = pgTable(
+  "playbook_claims",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    brandId: uuid("brand_id")
+      .notNull()
+      .references(() => brands.id, { onDelete: "restrict" }),
+    group: playbookGroup("group").notNull(),
+    claim: text("claim").notNull(),
+    because: text("because"),
+    provenance: playbookProvenance("provenance").notNull(),
+    // Set when the claim was drawn from an uploaded document.
+    sourceId: uuid("source_id").references(() => playbookSources.id, {
+      onDelete: "set null",
+    }),
+    corrected: boolean("corrected").notNull().default(false),
+    ...timestamps,
+  },
+  (t) => [
+    index("playbook_claims_brand_id_idx").on(t.brandId),
+    index("playbook_claims_source_id_idx").on(t.sourceId),
+  ],
 ).enableRLS();
