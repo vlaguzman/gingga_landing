@@ -38,6 +38,8 @@ vi.mock("next/link", async () => {
 });
 
 vi.mock("@/app/(auth)/login/actions", () => ({ logout: vi.fn() }));
+// The real action reaches @/db, which throws without DATABASE_URL.
+vi.mock("@/app/(app)/playbook/actions", () => ({ uploadSource: vi.fn(async () => ({})) }));
 
 nav.push = vi.fn((href: string) => {
   nav.pathname = href;

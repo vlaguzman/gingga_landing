@@ -22,7 +22,10 @@ const group = (g: string) => screen.getByRole("heading", { name: g }).closest("s
 describe("PlaybookView", () => {
   it("shows each claim under its group", () => {
     setup();
-    expect(screen.getAllByRole("heading", { level: 2 }).map((h) => h.textContent)).toEqual(PLAYBOOK_GROUPS);
+    expect(screen.getAllByRole("heading", { level: 2 }).map((h) => h.textContent)).toEqual([
+      ...PLAYBOOK_GROUPS,
+      "Uploaded sources",
+    ]);
     for (const g of PLAYBOOK_GROUPS) {
       for (const c of PLAYBOOK_CLAIMS.filter((x) => x.group === g)) {
         expect(within(group(g)).getByText(c.claim)).toBeInTheDocument();
@@ -77,5 +80,21 @@ describe("PlaybookView", () => {
     advance(2100);
     expect(within(group("Process")).getByText("Confirm every visit by WhatsApp.")).toBeInTheDocument();
     expect(within(group("Process")).getAllByRole("button", { name: "Correct this in chat" })).toHaveLength(3);
+  });
+});
+
+describe("PlaybookView sources", () => {
+  it("renders the uploaded sources block with the sources it receives", () => {
+    renderInApp(
+      <PlaybookView sources={[{ id: "s1", filename: "faq.md", sizeBytes: 10, status: "ready", errorMessage: null }]} />,
+      { path: "/playbook" },
+    );
+    expect(screen.getByRole("heading", { name: "Uploaded sources" })).toBeInTheDocument();
+    expect(screen.getByText("faq.md")).toBeInTheDocument();
+  });
+
+  it("shows the empty sources state by default", () => {
+    setup();
+    expect(screen.getByText(/No documents yet/)).toBeInTheDocument();
   });
 });

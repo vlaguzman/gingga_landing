@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import { PLAYBOOK_GROUPS } from "@/data/app/playbook";
+import type { PlaybookSourceItem } from "@/data/app/types";
 import { useApp } from "../AppProvider";
+import { PlaybookSources } from "./PlaybookSources";
 
-export function PlaybookView() {
+export function PlaybookView({ sources = [] }: { sources?: readonly PlaybookSourceItem[] }) {
   const { playbookClaims, pbLoadingId, correctClaim, addToPlaybook } = useApp();
   const [open, setOpen] = useState<string | null>(null);
 
@@ -63,6 +65,7 @@ export function PlaybookView() {
           </div>
         </section>
       ))}
+      <PlaybookSources sources={sources} />
       <p className="pf-foot">
         Your GINGGA writes every message and call script from this playbook. Anything uncorrected is taken as true — fix a line
         and every future draft uses it.

@@ -119,6 +119,15 @@ export interface PlaybookClaim {
   corrected?: boolean;
 }
 
+/** An uploaded playbook document as the UI needs it (serialisable; mapped from a db row in the page). */
+export interface PlaybookSourceItem {
+  id: string;
+  filename: string;
+  sizeBytes: number;
+  status: "processing" | "ready" | "failed";
+  errorMessage: string | null;
+}
+
 export type ChatMessage =
   | { role: "title"; text: string; when: string }
   | { role: "user" | "assistant"; text: string }
