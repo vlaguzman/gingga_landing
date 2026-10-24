@@ -2,6 +2,7 @@ import { sql } from "drizzle-orm";
 import {
   check,
   index,
+  integer,
   numeric,
   pgEnum,
   pgTable,
@@ -29,6 +30,9 @@ export const messageDirection = pgEnum("message_direction", [
   "inbound",
   "outbound",
 ]);
+
+// Semantic role of a stage. "open" stages are board columns; the rest are outcomes that leave the board.
+export const stageKind = pgEnum("stage_kind", ["open", "won", "lost", "nurturing"]);
 
 const timestamps = {
   createdAt: timestamp("created_at", { withTimezone: true })
@@ -93,6 +97,26 @@ export const campaigns = pgTable(
   (t) => [index("campaigns_brand_id_idx").on(t.brandId)],
 ).enableRLS();
 
+// Per-brand pipeline stages, editable by the user. Defaults come from src/db/default-stages.ts.
+export const pipelineStages = pgTable(
+  "pipeline_stages",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    brandId: uuid("brand_id")
+      .notNull()
+      .references(() => brands.id, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+    hint: text("hint"),
+    kind: stageKind("kind").notNull().default("open"),
+    position: integer("position").notNull(),
+    ...timestamps,
+  },
+  (t) => [
+    uniqueIndex("pipeline_stages_brand_name_key").on(t.brandId, t.name),
+    index("pipeline_stages_brand_position_idx").on(t.brandId, t.position),
+  ],
+).enableRLS();
+
 // last contact date is derived: max(messages.created_at) per lead.
 export const leads = pgTable(
   "leads",
@@ -109,11 +133,16 @@ export const leads = pgTable(
     name: text("name").notNull(),
     phoneNumber: text("phone_number").notNull(),
     email: text("email"),
+    // Current pipeline stage; editable by the user. Must belong to the same brand.
+    stageId: uuid("stage_id")
+      .notNull()
+      .references(() => pipelineStages.id, { onDelete: "restrict" }),
     ...timestamps,
   },
   (t) => [
     uniqueIndex("leads_brand_phone_key").on(t.brandId, t.phoneNumber),
     index("leads_campaign_id_idx").on(t.campaignId),
+    index("leads_brand_stage_idx").on(t.brandId, t.stageId),
   ],
 ).enableRLS();
 
