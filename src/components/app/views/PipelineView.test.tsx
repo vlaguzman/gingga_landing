@@ -2,7 +2,10 @@ import { advance, app, navMock, renderInApp, run } from "@/test/app.helper";
 import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { STAGES } from "@/data/app/chips";
 import { DEALS } from "@/data/app/deals";
+import type { PipelineStage } from "@/data/app/stages";
+import type { StageId } from "@/data/app/types";
 import { PipelineView } from "./PipelineView";
 
 beforeEach(() => {
@@ -14,9 +17,17 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-const setup = () => {
+const KINDS: Record<string, PipelineStage["kind"]> = { won: "won", lost: "lost", nurturing: "nurturing" };
+const DEFAULT: PipelineStage[] = (Object.keys(STAGES) as StageId[]).map((slug, position) => ({
+  id: `stage-${slug}`,
+  ...STAGES[slug],
+  kind: KINDS[slug] ?? "open",
+  position,
+}));
+
+const setup = (stages: PipelineStage[] = DEFAULT) => {
   const user = userEvent.setup({ delay: null });
-  renderInApp(<PipelineView />, { path: "/pipeline" });
+  renderInApp(<PipelineView stages={stages} />, { path: "/pipeline" });
   return user;
 };
 const column = (name: string) => screen.getByRole("region", { name });
@@ -46,6 +57,19 @@ describe("PipelineView board", () => {
     await user.click(within(column("Visit Scheduled")).getByRole("button", { name: /Santiago Osorio/ }));
     expect(app().dealSel).toBe("d6");
     expect(screen.getByText("Visit scheduled · Thu · 10:00 AM")).toBeInTheDocument();
+  });
+});
+
+describe("PipelineView custom stages", () => {
+  it("renders the brand's own open stages as columns and keeps orphaned deals in the first one", () => {
+    setup([
+      { id: "a", name: "Inbox", hint: "", kind: "open", position: 0 },
+      { id: "b", name: "Closing", hint: "", kind: "open", position: 1 },
+      { id: "c", name: "Done", hint: "", kind: "won", position: 2 },
+    ]);
+    expect(screen.getAllByRole("region").map((r) => r.getAttribute("aria-label"))).toEqual(["Inbox", "Closing"]);
+    expect(within(column("Inbox")).getByRole("button", { name: /Juliana Arango/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Done" })).toBeInTheDocument();
   });
 });
 

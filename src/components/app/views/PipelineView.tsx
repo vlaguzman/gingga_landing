@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { BOARD_STAGES, OUTCOME_STAGES, STAGES, type OutcomeStageId } from "@/data/app/chips";
+import { dealStage, stageSlug, type PipelineStage } from "@/data/app/stages";
 import type { Deal, StageId } from "@/data/app/types";
 import { AppIcon } from "../AppIcon";
 import { useApp } from "../AppProvider";
@@ -9,10 +9,11 @@ import { ContactPanel } from "../ContactPanel";
 import { DealChat } from "../DealChat";
 import { ChanChip, StageChip } from "../Chips";
 
-type Tab = "board" | "list" | OutcomeStageId;
+type OutcomeKind = "won" | "lost" | "nurturing";
+type Tab = "board" | "list" | (string & {});
 
 /** Extra line shown for deals that left the board, per outcome. */
-const OUTCOME_DETAIL: Record<OutcomeStageId, (d: Deal) => string> = {
+const OUTCOME_DETAIL: Record<OutcomeKind, (d: Deal) => string> = {
   won: (d) => `${d.property} · ${d.price} · deed signed ${d.closedOn}`,
   lost: (d) => `${d.lostReason} · ${d.closedOn}`,
   nurturing: (d) => `Next touch ${d.nextTouch} · ${d.nurtureReason}`,
@@ -31,37 +32,55 @@ const STATE_TITLE: Record<StageId, (d: Deal) => string> = {
   nurturing: (d) => `Nurturing — next touch ${d.nextTouch}`,
 };
 
-function KanbanBoard({ deals, onSel }: { deals: Deal[]; onSel: (id: string) => void }) {
+function DbStageChip({ stage }: { stage: PipelineStage }) {
+  return (
+    <span className={`role-chip role-chip--${stageSlug(stage) ?? stage.kind}`} title={stage.hint}>
+      {stage.name}
+    </span>
+  );
+}
+
+function KanbanBoard({
+  stages,
+  deals,
+  onSel,
+}: {
+  stages: PipelineStage[];
+  deals: Deal[];
+  onSel: (id: string) => void;
+}) {
   return (
     <div className="kb">
-      {BOARD_STAGES.map((s) => {
-        const rows = deals.filter((d) => d.stage === s);
-        return (
-          <section key={s} className="kb-col" aria-label={STAGES[s].name}>
-            <div className="kb-head" title={STAGES[s].hint}>
-              <div className="kb-head-row">
-                <StageChip r={s} />
-                <span className="kb-n">{rows.length}</span>
+      {stages
+        .filter((s) => s.kind === "open")
+        .map((s) => {
+          const rows = deals.filter((d) => dealStage(d, stages)?.id === s.id);
+          return (
+            <section key={s.id} className="kb-col" aria-label={s.name}>
+              <div className="kb-head" title={s.hint}>
+                <div className="kb-head-row">
+                  <DbStageChip stage={s} />
+                  <span className="kb-n">{rows.length}</span>
+                </div>
+                <p className="kb-hint">{s.hint}</p>
               </div>
-              <p className="kb-hint">{STAGES[s].hint}</p>
-            </div>
-            <div className="kb-cards">
-              {rows.map((d) => (
-                <button key={d.id} type="button" className="card kb-card" onClick={() => onSel(d.id)}>
-                  <span className="kb-title">{d.name}</span>
-                  <span className="kb-contact">{d.property}</span>
-                  <span className="kb-last">{d.last || d.next}</span>
-                  <span className="kb-meta">
-                    <ChanChip p={d.channel} />
-                    <em>{d.meta}</em>
-                  </span>
-                </button>
-              ))}
-              {rows.length === 0 && <div className="kb-empty">Nothing here yet</div>}
-            </div>
-          </section>
-        );
-      })}
+              <div className="kb-cards">
+                {rows.map((d) => (
+                  <button key={d.id} type="button" className="card kb-card" onClick={() => onSel(d.id)}>
+                    <span className="kb-title">{d.name}</span>
+                    <span className="kb-contact">{d.property}</span>
+                    <span className="kb-last">{d.last || d.next}</span>
+                    <span className="kb-meta">
+                      <ChanChip p={d.channel} />
+                      <em>{d.meta}</em>
+                    </span>
+                  </button>
+                ))}
+                {rows.length === 0 && <div className="kb-empty">Nothing here yet</div>}
+              </div>
+            </section>
+          );
+        })}
     </div>
   );
 }
@@ -81,18 +100,20 @@ function DealRow({ deal, line, onSel }: { deal: Deal; line: string; onSel: (id: 
   );
 }
 
-export function PipelineView() {
+export function PipelineView({ stages }: { stages: PipelineStage[] }) {
   const { deals, dealSel, setDealSel } = useApp();
   const [tab, setTab] = useState<Tab>("board");
   const deal = deals.find((d) => d.id === dealSel);
 
   if (!deal) {
+    const boardStages = stages.filter((s) => s.kind === "open");
     const tabs: [Tab, string][] = [
       ["board", "Board"],
       ["list", "List"],
-      ...OUTCOME_STAGES.map((s): [Tab, string] => [s, STAGES[s].name]),
+      ...stages.filter((s) => s.kind !== "open").map((s): [Tab, string] => [s.id, s.name]),
     ];
-    const outcome = tab !== "board" && tab !== "list" ? tab : null;
+    const outcome = stages.find((s) => s.id === tab && s.kind !== "open") ?? null;
+    const outcomeDeals = outcome ? deals.filter((d) => dealStage(d, stages)?.id === outcome.id) : [];
     return (
       <div>
         <h1 className="pg">Pipeline</h1>
@@ -111,15 +132,15 @@ export function PipelineView() {
               </button>
             ))}
           </div>
-          {tab === "board" && <KanbanBoard deals={deals} onSel={setDealSel} />}
+          {tab === "board" && <KanbanBoard stages={stages} deals={deals} onSel={setDealSel} />}
           {tab === "list" &&
-            BOARD_STAGES.map((s) => {
-              const rows = deals.filter((d) => d.stage === s);
+            boardStages.map((s) => {
+              const rows = deals.filter((d) => dealStage(d, stages)?.id === s.id);
               if (!rows.length) return null;
               return (
-                <div key={s} className="po-group">
-                  <h2 className="mini-eyebrow" title={STAGES[s].hint}>
-                    {STAGES[s].name} · {rows.length}
+                <div key={s.id} className="po-group">
+                  <h2 className="mini-eyebrow" title={s.hint}>
+                    {s.name} · {rows.length}
                   </h2>
                   {rows.map((d) => (
                     <DealRow key={d.id} deal={d} line={`${d.property} · ${d.meta}`} onSel={setDealSel} />
@@ -129,13 +150,11 @@ export function PipelineView() {
             })}
           {outcome && (
             <div className="po-group">
-              <p className="po-hint">{STAGES[outcome].hint}</p>
-              {deals
-                .filter((d) => d.stage === outcome)
-                .map((d) => (
-                  <DealRow key={d.id} deal={d} line={OUTCOME_DETAIL[outcome](d)} onSel={setDealSel} />
-                ))}
-              {!deals.some((d) => d.stage === outcome) && <p className="id-empty">Nothing here yet.</p>}
+              <p className="po-hint">{outcome.hint}</p>
+              {outcomeDeals.map((d) => (
+                <DealRow key={d.id} deal={d} line={OUTCOME_DETAIL[outcome.kind as OutcomeKind](d)} onSel={setDealSel} />
+              ))}
+              {outcomeDeals.length === 0 && <p className="id-empty">Nothing here yet.</p>}
             </div>
           )}
         </div>
