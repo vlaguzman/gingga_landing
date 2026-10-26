@@ -3015,3 +3015,74 @@
   font-size: 13px;
   color: #c0392b;
 }
+
+.app .role-chip--open {
+  background: var(--a-select);
+  color: var(--navy);
+}
+
+.app .kb-name {
+  cursor: text;
+}
+
+.app .kb-head[draggable="true"] {
+  cursor: grab;
+}
+
+.app .kb-name-input {
+  min-width: 0;
+  flex: 1;
+  margin-right: 8px;
+  border: 1px solid var(--a-line);
+  border-radius: 8px;
+  padding: 3px 8px;
+  font-size: 13px;
+  font-weight: 700;
+  background: var(--a-card);
+}
+
+.app .kb-tools {
+  display: flex;
+  gap: 4px;
+  margin-top: 6px;
+  opacity: 0.55;
+}
+
+.app .kb-head:hover .kb-tools,
+.app .kb-tools:focus-within {
+  opacity: 1;
+}
+
+.app .kb-tools button {
+  border: 1px solid var(--a-line);
+  border-radius: 6px;
+  min-width: 26px;
+  height: 24px;
+  font-size: 13px;
+  background: var(--a-card);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app .kb-tools button:disabled {
+  opacity: 0.35;
+}
+
+.app .ld-grid {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 360px);
+  gap: 12px 20px;
+  margin-top: 22px;
+  align-items: center;
+}
+
+.app .ld-grid dt {
+  font-size: 13px;
+  color: var(--a-ink-40);
+}
+
+.app .ld-grid dd {
+  margin: 0;
+  font-size: 15px;
+}

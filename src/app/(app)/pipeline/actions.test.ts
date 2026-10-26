@@ -1,21 +1,23 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { limit, returning, set, update, revalidatePath } = vi.hoisted(() => {
+const { limit, orderBy, returning, set, update, transaction, revalidatePath } = vi.hoisted(() => {
   const limit = vi.fn();
+  const orderBy = vi.fn();
   const returning = vi.fn();
   const where = vi.fn(() => ({ returning, limit }));
   const set = vi.fn(() => ({ where }));
   const update = vi.fn(() => ({ set }));
-  return { limit, returning, set, update, revalidatePath: vi.fn() };
+  const transaction = vi.fn(async (cb: (tx: { update: typeof update }) => Promise<void>) => cb({ update }));
+  return { limit, orderBy, returning, set, update, transaction, revalidatePath: vi.fn() };
 });
 
 vi.mock("@/db", () => ({
-  db: { select: () => ({ from: () => ({ where: () => ({ limit }) }) }), update },
+  db: { select: () => ({ from: () => ({ where: () => ({ limit, orderBy }) }) }), update, transaction },
 }));
 vi.mock("@/lib/auth", () => ({ requireUser: vi.fn(async () => ({ brandId: "brand-1" })) }));
 vi.mock("next/cache", () => ({ revalidatePath }));
 
-import { renameStage, updateLeadStage } from "./actions";
+import { renameStage, reorderStages, updateLeadStage } from "./actions";
 
 describe("updateLeadStage", () => {
   beforeEach(() => {
@@ -91,5 +93,42 @@ describe("renameStage", () => {
     returning.mockRejectedValue(new Error("boom"));
 
     await expect(renameStage("stage-1", "Ok")).rejects.toThrow("boom");
+  });
+});
+
+describe("reorderStages", () => {
+  const stages = [
+    { id: "a", kind: "open" },
+    { id: "b", kind: "open" },
+    { id: "c", kind: "open" },
+    { id: "won", kind: "won" },
+  ];
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    orderBy.mockResolvedValue(stages);
+  });
+
+  it("writes the new order and keeps outcome stages after the columns", async () => {
+    expect(await reorderStages(["c", "a", "b"])).toEqual({ ok: true });
+
+    expect(set.mock.calls.map((c) => (c as unknown[])[0])).toEqual([
+      { position: 0 },
+      { position: 1 },
+      { position: 2 },
+      { position: 3 },
+    ]);
+    expect(transaction).toHaveBeenCalledTimes(1);
+    expect(revalidatePath).toHaveBeenCalledWith("/pipeline");
+  });
+
+  it.each([
+    ["a foreign id", ["a", "b", "x"]],
+    ["a missing id", ["a", "b"]],
+    ["a duplicate id", ["a", "a", "b"]],
+    ["an outcome stage", ["a", "b", "won"]],
+  ])("rejects %s without writing", async (_label, ids) => {
+    expect(await reorderStages(ids)).toEqual({ ok: false, error: "The stages changed, refresh and try again." });
+    expect(transaction).not.toHaveBeenCalled();
   });
 });

@@ -1,6 +1,6 @@
 "use server";
 
-import { and, eq } from "drizzle-orm";
+import { and, asc, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/db";
 import { leads, pipelineStages } from "@/db/schema";
@@ -54,6 +54,42 @@ export async function renameStage(stageId: string, name: string): Promise<Rename
     if (code === "23505") return { ok: false, error: "Another stage already has that name." };
     throw e;
   }
+
+  revalidatePath("/pipeline");
+  return { ok: true };
+}
+
+export type ReorderStagesResult = { ok: true } | { ok: false; error: string };
+
+/**
+ * Persists the order of the board columns. `orderedIds` must be exactly the brand's open stages; outcome
+ * stages (won, lost, nurturing) are not columns and keep their relative order after them.
+ */
+export async function reorderStages(orderedIds: string[]): Promise<ReorderStagesResult> {
+  const { brandId } = await requireUser();
+
+  const all = await db
+    .select({ id: pipelineStages.id, kind: pipelineStages.kind })
+    .from(pipelineStages)
+    .where(eq(pipelineStages.brandId, brandId))
+    .orderBy(asc(pipelineStages.position));
+
+  const open = all.filter((s) => s.kind === "open").map((s) => s.id);
+  const sameSet =
+    new Set(orderedIds).size === orderedIds.length &&
+    orderedIds.length === open.length &&
+    orderedIds.every((id) => open.includes(id));
+  if (!sameSet) return { ok: false, error: "The stages changed, refresh and try again." };
+
+  const finalOrder = [...orderedIds, ...all.filter((s) => s.kind !== "open").map((s) => s.id)];
+  await db.transaction(async (tx) => {
+    for (const [position, id] of finalOrder.entries()) {
+      await tx
+        .update(pipelineStages)
+        .set({ position })
+        .where(and(eq(pipelineStages.id, id), eq(pipelineStages.brandId, brandId)));
+    }
+  });
 
   revalidatePath("/pipeline");
   return { ok: true };
