@@ -3086,3 +3086,8 @@
   margin: 0;
   font-size: 15px;
 }
+
+.app .wa-error {
+  margin: 0;
+  padding: 6px 16px;
+}

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { limit, orderBy, returning, set, update, transaction, revalidatePath } = vi.hoisted(() => {
+const { limit, orderBy, returning, set, update, transaction, insert, values, revalidatePath } = vi.hoisted(() => {
   const limit = vi.fn();
   const orderBy = vi.fn();
   const returning = vi.fn();
@@ -8,16 +8,18 @@ const { limit, orderBy, returning, set, update, transaction, revalidatePath } = 
   const set = vi.fn(() => ({ where }));
   const update = vi.fn(() => ({ set }));
   const transaction = vi.fn(async (cb: (tx: { update: typeof update }) => Promise<void>) => cb({ update }));
-  return { limit, orderBy, returning, set, update, transaction, revalidatePath: vi.fn() };
+  const values = vi.fn(() => ({ returning }));
+  const insert = vi.fn(() => ({ values }));
+  return { limit, orderBy, returning, set, update, transaction, insert, values, revalidatePath: vi.fn() };
 });
 
 vi.mock("@/db", () => ({
-  db: { select: () => ({ from: () => ({ where: () => ({ limit, orderBy }) }) }), update, transaction },
+  db: { select: () => ({ from: () => ({ where: () => ({ limit, orderBy }) }) }), update, insert, transaction },
 }));
-vi.mock("@/lib/auth", () => ({ requireUser: vi.fn(async () => ({ brandId: "brand-1" })) }));
+vi.mock("@/lib/auth", () => ({ requireUser: vi.fn(async () => ({ brandId: "brand-1", id: "user-1" })) }));
 vi.mock("next/cache", () => ({ revalidatePath }));
 
-import { renameStage, reorderStages, updateLeadStage } from "./actions";
+import { loadLeadMessages, renameStage, reorderStages, sendLeadMessage, updateLeadStage } from "./actions";
 
 describe("updateLeadStage", () => {
   beforeEach(() => {
@@ -130,5 +132,62 @@ describe("reorderStages", () => {
   ])("rejects %s without writing", async (_label, ids) => {
     expect(await reorderStages(ids)).toEqual({ ok: false, error: "The stages changed, refresh and try again." });
     expect(transaction).not.toHaveBeenCalled();
+  });
+});
+
+describe("loadLeadMessages", () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it("returns the conversation with ISO dates", async () => {
+    limit.mockResolvedValue([{ id: "lead-1" }]);
+    orderBy.mockResolvedValue([
+      { id: "m1", direction: "inbound", text: "Hi", createdAt: new Date("2026-03-05T10:00:00Z") },
+    ]);
+
+    expect(await loadLeadMessages("lead-1")).toEqual({
+      ok: true,
+      messages: [{ id: "m1", direction: "inbound", text: "Hi", createdAt: "2026-03-05T10:00:00.000Z" }],
+    });
+  });
+
+  it("does not read messages of a lead from another brand", async () => {
+    limit.mockResolvedValue([]);
+
+    expect(await loadLeadMessages("foreign")).toEqual({ ok: false, error: "Lead not found." });
+    expect(orderBy).not.toHaveBeenCalled();
+  });
+});
+
+describe("sendLeadMessage", () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it("stores a trimmed outbound message from the signed-in user", async () => {
+    limit.mockResolvedValue([{ id: "lead-1" }]);
+    returning.mockResolvedValue([
+      { id: "m2", direction: "outbound", text: "Hello", createdAt: new Date("2026-03-05T11:00:00Z") },
+    ]);
+
+    const res = await sendLeadMessage("lead-1", "  Hello  ");
+
+    expect(values).toHaveBeenCalledWith({ leadId: "lead-1", direction: "outbound", senderUserId: "user-1", text: "Hello" });
+    expect(res).toEqual({
+      ok: true,
+      message: { id: "m2", direction: "outbound", text: "Hello", createdAt: "2026-03-05T11:00:00.000Z" },
+    });
+  });
+
+  it.each([
+    ["   ", "Write a message first."],
+    ["x".repeat(2001), "Use 2000 characters or fewer."],
+  ])("rejects an invalid message without writing", async (text, error) => {
+    expect(await sendLeadMessage("lead-1", text)).toEqual({ ok: false, error });
+    expect(insert).not.toHaveBeenCalled();
+  });
+
+  it("rejects a lead from another brand without writing", async () => {
+    limit.mockResolvedValue([]);
+
+    expect(await sendLeadMessage("foreign", "Hi")).toEqual({ ok: false, error: "Lead not found." });
+    expect(insert).not.toHaveBeenCalled();
   });
 });

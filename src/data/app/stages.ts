@@ -20,3 +20,12 @@ export interface PipelineLead {
   /** ISO date of the latest message, or null if the lead has none. */
   lastContact: string | null;
 }
+
+/** A message of a lead's conversation, as loaded from the database. */
+export interface PipelineMessage {
+  id: string;
+  direction: "inbound" | "outbound";
+  text: string;
+  /** ISO date. */
+  createdAt: string;
+}

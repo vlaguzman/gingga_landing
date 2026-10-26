@@ -1,15 +1,23 @@
 import { app, renderInApp, run } from "@/test/app.helper";
-import { act, screen, within } from "@testing-library/react";
+import { act, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { PipelineLead, PipelineStage } from "@/data/app/stages";
 
-const { renameStage, reorderStages, updateLeadStage } = vi.hoisted(() => ({
+const { renameStage, reorderStages, updateLeadStage, loadLeadMessages, sendLeadMessage } = vi.hoisted(() => ({
   renameStage: vi.fn(),
   reorderStages: vi.fn(),
   updateLeadStage: vi.fn(),
+  loadLeadMessages: vi.fn(),
+  sendLeadMessage: vi.fn(),
 }));
-vi.mock("@/app/(app)/pipeline/actions", () => ({ renameStage, reorderStages, updateLeadStage }));
+vi.mock("@/app/(app)/pipeline/actions", () => ({
+  renameStage,
+  reorderStages,
+  updateLeadStage,
+  loadLeadMessages,
+  sendLeadMessage,
+}));
 
 import { PipelineView } from "./PipelineView";
 
@@ -40,6 +48,7 @@ beforeEach(() => {
   renameStage.mockResolvedValue({ ok: true });
   reorderStages.mockResolvedValue({ ok: true });
   updateLeadStage.mockResolvedValue({ ok: true });
+  loadLeadMessages.mockResolvedValue({ ok: true, messages: [] });
 });
 
 describe("PipelineView board", () => {
@@ -142,16 +151,29 @@ describe("PipelineView column reorder", () => {
     const user = setup();
     await user.click(screen.getByRole("button", { name: "Move New Lead right" }));
     expect(await screen.findByRole("alert")).toHaveTextContent("The stages changed");
-    expect(columnNames()).toEqual(["New Lead", "Qualified", "Visit"]);
+    await waitFor(() => expect(columnNames()).toEqual(["New Lead", "Qualified", "Visit"]));
   });
 });
 
 describe("PipelineView lead detail", () => {
-  it("opens a lead from its card and changes its stage", async () => {
+  const openLead = async (user: ReturnType<typeof setup>, name = /Juliana Arango/) => {
+    await user.click(within(column("New Lead")).getByRole("button", { name }));
+  };
+
+  it("always shows the WhatsApp chat, with an empty state when there are no messages", async () => {
     const user = setup();
-    await user.click(within(column("New Lead")).getByRole("button", { name: /Juliana Arango/ }));
+    await openLead(user);
     expect(app().dealSel).toBe("l1");
-    expect(screen.getByRole("heading", { level: 1, name: "Juliana Arango" })).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "WhatsApp chat with Juliana Arango" })).toBeInTheDocument();
+    expect(await screen.findByText("No messages yet. Say hello below.")).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "Message Juliana Arango" })).toBeInTheDocument();
+    expect(loadLeadMessages).toHaveBeenCalledWith("l1");
+  });
+
+  it("opens the contact info and changes the stage", async () => {
+    const user = setup();
+    await openLead(user);
+    await user.click(screen.getByRole("button", { name: /Contact info/ }));
     expect(screen.getByText("juliana@example.com")).toBeInTheDocument();
 
     await user.selectOptions(screen.getByLabelText("Stage"), "s-visit");
@@ -161,7 +183,8 @@ describe("PipelineView lead detail", () => {
   it("reverts the stage and shows the error when the update fails", async () => {
     updateLeadStage.mockResolvedValue({ ok: false, error: "Unknown stage." });
     const user = setup();
-    await user.click(within(column("New Lead")).getByRole("button", { name: /Juliana Arango/ }));
+    await openLead(user);
+    await user.click(screen.getByRole("button", { name: /Contact info/ }));
     await user.selectOptions(screen.getByLabelText("Stage"), "s-visit");
     expect(await screen.findByRole("alert")).toHaveTextContent("Unknown stage.");
     expect(screen.getByLabelText("Stage")).toHaveValue("s-new");

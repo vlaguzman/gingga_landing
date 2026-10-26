@@ -3,7 +3,8 @@
 import { and, asc, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/db";
-import { leads, pipelineStages } from "@/db/schema";
+import { leads, messages, pipelineStages } from "@/db/schema";
+import type { PipelineMessage } from "@/data/app/stages";
 import { requireUser } from "@/lib/auth";
 
 export type UpdateLeadStageResult = { ok: true } | { ok: false; error: string };
@@ -93,4 +94,54 @@ export async function reorderStages(orderedIds: string[]): Promise<ReorderStages
 
   revalidatePath("/pipeline");
   return { ok: true };
+}
+
+const MAX_MESSAGE = 2000;
+
+export type LoadMessagesResult = { ok: true; messages: PipelineMessage[] } | { ok: false; error: string };
+
+/** Conversation of one lead, oldest first. Empty for a lead without messages. */
+export async function loadLeadMessages(leadId: string): Promise<LoadMessagesResult> {
+  const { brandId } = await requireUser();
+
+  const [lead] = await db
+    .select({ id: leads.id })
+    .from(leads)
+    .where(and(eq(leads.id, leadId), eq(leads.brandId, brandId)))
+    .limit(1);
+  if (!lead) return { ok: false, error: "Lead not found." };
+
+  const rows = await db
+    .select({ id: messages.id, direction: messages.direction, text: messages.text, createdAt: messages.createdAt })
+    .from(messages)
+    .where(eq(messages.leadId, leadId))
+    .orderBy(asc(messages.createdAt));
+
+  return { ok: true, messages: rows.map((m) => ({ ...m, createdAt: m.createdAt.toISOString() })) };
+}
+
+export type SendMessageResult = { ok: true; message: PipelineMessage } | { ok: false; error: string };
+
+/** Stores an outbound message from the signed-in user. It is not delivered over WhatsApp yet. */
+export async function sendLeadMessage(leadId: string, text: string): Promise<SendMessageResult> {
+  const { brandId, id: userId } = await requireUser();
+
+  const trimmed = text.trim();
+  if (!trimmed) return { ok: false, error: "Write a message first." };
+  if (trimmed.length > MAX_MESSAGE) return { ok: false, error: `Use ${MAX_MESSAGE} characters or fewer.` };
+
+  const [lead] = await db
+    .select({ id: leads.id })
+    .from(leads)
+    .where(and(eq(leads.id, leadId), eq(leads.brandId, brandId)))
+    .limit(1);
+  if (!lead) return { ok: false, error: "Lead not found." };
+
+  const [row] = await db
+    .insert(messages)
+    .values({ leadId, direction: "outbound", senderUserId: userId, text: trimmed })
+    .returning({ id: messages.id, direction: messages.direction, text: messages.text, createdAt: messages.createdAt });
+
+  revalidatePath("/pipeline");
+  return { ok: true, message: { ...row, createdAt: row.createdAt.toISOString() } };
 }
