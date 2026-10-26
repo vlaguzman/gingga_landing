@@ -8,6 +8,8 @@ import type { PipelineStage } from "@/data/app/stages";
 import type { StageId } from "@/data/app/types";
 import { PipelineView } from "./PipelineView";
 
+vi.mock("@/app/(app)/pipeline/actions", () => ({ renameStage: vi.fn(), updateLeadStage: vi.fn() }));
+
 beforeEach(() => {
   vi.useFakeTimers();
   vi.spyOn(Math, "random").mockReturnValue(0);

@@ -29,3 +29,32 @@ export async function updateLeadStage(leadId: string, stageId: string): Promise<
   revalidatePath("/pipeline");
   return { ok: true };
 }
+
+export type RenameStageResult = { ok: true } | { ok: false; error: string };
+
+const MAX_STAGE_NAME = 40;
+
+export async function renameStage(stageId: string, name: string): Promise<RenameStageResult> {
+  const { brandId } = await requireUser();
+
+  const trimmed = name.trim();
+  if (!trimmed) return { ok: false, error: "The name can't be empty." };
+  if (trimmed.length > MAX_STAGE_NAME) return { ok: false, error: `Use ${MAX_STAGE_NAME} characters or fewer.` };
+
+  try {
+    const updated = await db
+      .update(pipelineStages)
+      .set({ name: trimmed })
+      .where(and(eq(pipelineStages.id, stageId), eq(pipelineStages.brandId, brandId)))
+      .returning({ id: pipelineStages.id });
+    if (updated.length === 0) return { ok: false, error: "Stage not found." };
+  } catch (e) {
+    // Postgres unique violation on (brand_id, name); drizzle may wrap it in `cause`.
+    const code = (e as { code?: string; cause?: { code?: string } }).code ?? (e as { cause?: { code?: string } }).cause?.code;
+    if (code === "23505") return { ok: false, error: "Another stage already has that name." };
+    throw e;
+  }
+
+  revalidatePath("/pipeline");
+  return { ok: true };
+}

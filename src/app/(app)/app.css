@@ -2977,3 +2977,41 @@
   opacity: 0.5;
   cursor: default;
 }
+
+.app .se-list {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+  max-width: 420px;
+}
+
+.app .se-field {
+  display: grid;
+  gap: 4px;
+}
+
+.app .se-kind {
+  font-size: 12px;
+  color: var(--a-ink-40);
+  text-transform: capitalize;
+}
+
+.app .se-input {
+  border: 1px solid var(--a-line);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 15px;
+  background: var(--a-card);
+}
+
+.app .se-input[aria-invalid="true"] {
+  border-color: #c0392b;
+}
+
+.app .se-error {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #c0392b;
+}

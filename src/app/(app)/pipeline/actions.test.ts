@@ -15,7 +15,7 @@ vi.mock("@/db", () => ({
 vi.mock("@/lib/auth", () => ({ requireUser: vi.fn(async () => ({ brandId: "brand-1" })) }));
 vi.mock("next/cache", () => ({ revalidatePath }));
 
-import { updateLeadStage } from "./actions";
+import { renameStage, updateLeadStage } from "./actions";
 
 describe("updateLeadStage", () => {
   beforeEach(() => {
@@ -50,5 +50,46 @@ describe("updateLeadStage", () => {
 
     expect(result).toEqual({ ok: false, error: "Lead not found." });
     expect(revalidatePath).not.toHaveBeenCalled();
+  });
+});
+
+describe("renameStage", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("trims the name, saves it and revalidates", async () => {
+    returning.mockResolvedValue([{ id: "stage-1" }]);
+
+    expect(await renameStage("stage-1", "  Hot lead  ")).toEqual({ ok: true });
+    expect(set).toHaveBeenCalledWith({ name: "Hot lead" });
+    expect(revalidatePath).toHaveBeenCalledWith("/pipeline");
+  });
+
+  it.each([
+    ["   ", "The name can't be empty."],
+    ["x".repeat(41), "Use 40 characters or fewer."],
+  ])("rejects an invalid name without touching the database", async (name, error) => {
+    expect(await renameStage("stage-1", name)).toEqual({ ok: false, error });
+    expect(update).not.toHaveBeenCalled();
+  });
+
+  it("reports not found for a stage of another brand", async () => {
+    returning.mockResolvedValue([]);
+
+    expect(await renameStage("foreign", "Anything")).toEqual({ ok: false, error: "Stage not found." });
+  });
+
+  it("maps a unique violation to a friendly message", async () => {
+    returning.mockRejectedValue(Object.assign(new Error("dup"), { code: "23505" }));
+
+    expect(await renameStage("stage-1", "Won")).toEqual({ ok: false, error: "Another stage already has that name." });
+    expect(revalidatePath).not.toHaveBeenCalled();
+  });
+
+  it("rethrows unexpected errors", async () => {
+    returning.mockRejectedValue(new Error("boom"));
+
+    await expect(renameStage("stage-1", "Ok")).rejects.toThrow("boom");
   });
 });

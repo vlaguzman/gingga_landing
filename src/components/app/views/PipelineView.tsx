@@ -8,9 +8,10 @@ import { useApp } from "../AppProvider";
 import { ContactPanel } from "../ContactPanel";
 import { DealChat } from "../DealChat";
 import { ChanChip, StageChip } from "../Chips";
+import { StageEditor } from "../StageEditor";
 
 type OutcomeKind = "won" | "lost" | "nurturing";
-type Tab = "board" | "list" | (string & {});
+type Tab = "board" | "list" | "edit" | (string & {});
 
 /** Extra line shown for deals that left the board, per outcome. */
 const OUTCOME_DETAIL: Record<OutcomeKind, (d: Deal) => string> = {
@@ -112,6 +113,7 @@ export function PipelineView({ stages }: { stages: PipelineStage[] }) {
       ["list", "List"],
       ...stages.filter((s) => s.kind !== "open").map((s): [Tab, string] => [s.id, s.name]),
     ];
+    tabs.push(["edit", "Edit stages"]);
     const outcome = stages.find((s) => s.id === tab && s.kind !== "open") ?? null;
     const outcomeDeals = outcome ? deals.filter((d) => dealStage(d, stages)?.id === outcome.id) : [];
     return (
@@ -132,6 +134,7 @@ export function PipelineView({ stages }: { stages: PipelineStage[] }) {
               </button>
             ))}
           </div>
+          {tab === "edit" && <StageEditor stages={stages} />}
           {tab === "board" && <KanbanBoard stages={stages} deals={deals} onSel={setDealSel} />}
           {tab === "list" &&
             boardStages.map((s) => {

@@ -10,15 +10,17 @@ export interface PipelineStage {
   position: number;
 }
 
-/** Default stage slug whose name matches, used only for chip colours. */
-export function stageSlug(stage: PipelineStage): StageId | undefined {
-  return (Object.keys(STAGES) as StageId[]).find((s) => STAGES[s].name === stage.name);
-}
+const SLUGS = Object.keys(STAGES) as StageId[];
 
 /**
- * Bridge while deals are still mock data: a deal sits in the stage whose name matches its slug's
- * default name, or in the first open stage if that stage was renamed or removed.
+ * Bridge while deals are still mock data: the default stages sit at positions 0..9 in the order of STAGES,
+ * so a slug maps to a position and survives renames. Dropped when leads come from the database.
  */
+export function stageSlug(stage: PipelineStage): StageId | undefined {
+  return SLUGS[stage.position];
+}
+
+/** The stage a mock deal sits in, or the first open stage if its position no longer exists. */
 export function dealStage(deal: Deal, stages: PipelineStage[]): PipelineStage | undefined {
-  return stages.find((s) => s.name === STAGES[deal.stage].name) ?? stages.find((s) => s.kind === "open");
+  return stages.find((s) => s.position === SLUGS.indexOf(deal.stage)) ?? stages.find((s) => s.kind === "open");
 }
