@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import {
-  CRM_PATH,
   CRM_SECTIONS,
   demoHref,
   homeLangFromPathname,
@@ -90,13 +89,9 @@ export function Header() {
             <Link href={CRM_SECTIONS.services}>Services</Link>
           </nav>
         ) : (
-          <nav className="site-nav site-nav--home" aria-label="Main">
+          <nav className="site-nav" aria-label="Main">
             <Link href={sections.howItWorks}>{copy.howItWorks}</Link>
-            <Link href={sections.example}>{copy.example}</Link>
-            <Link href={sections.integrations}>{copy.integrations}</Link>
             <Link href={sections.pricing}>{copy.pricing}</Link>
-            <Link href={sections.vision}>{copy.vision}</Link>
-            <Link href={CRM_PATH}>{copy.crm}</Link>
             <Link
               className="site-nav__lang"
               href={homePath(other)}

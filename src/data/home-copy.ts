@@ -3,11 +3,7 @@ export type Lang = "en" | "es";
 export type HomeCopy = {
   nav: {
     howItWorks: string;
-    example: string;
-    integrations: string;
     pricing: string;
-    vision: string;
-    crm: string;
     bookDemo: string;
     switchTo: string;
     switchLabel: string;
@@ -76,11 +72,7 @@ export type HomeCopy = {
 const en: HomeCopy = {
   nav: {
     howItWorks: "How it works",
-    example: "Example",
-    integrations: "Integrations",
     pricing: "Pricing",
-    vision: "Vision",
-    crm: "For sales teams",
     bookDemo: "Book a demo",
     switchTo: "Español",
     switchLabel: "Ver esta página en español",
@@ -177,7 +169,7 @@ const en: HomeCopy = {
         features: [
           "3 posts a week, in your voice",
           "A voice you set up once and that keeps learning from what you feed it",
-          "Your meetings and reading turned into post ideas",
+          "One connected source (meetings, notes, reading or dictation) turned into post ideas",
           "Idea bank, editorial calendar and LinkedIn scheduling",
         ],
       },
@@ -190,7 +182,7 @@ const en: HomeCopy = {
         includesTitle: "Everything in Presence, plus:",
         features: [
           "A post every day",
-          "All your sources connected: meetings, notes, reading and dictation",
+          "All your sources connected, not just one: meetings, notes, reading and dictation",
           "Priority support",
         ],
         featured: true,
@@ -266,11 +258,7 @@ const en: HomeCopy = {
 const es: HomeCopy = {
   nav: {
     howItWorks: "Cómo funciona",
-    example: "Ejemplo",
-    integrations: "Integraciones",
     pricing: "Precios",
-    vision: "Visión",
-    crm: "Para ventas",
     bookDemo: "Reservar una demo",
     switchTo: "English",
     switchLabel: "View this page in English",
@@ -367,7 +355,7 @@ const es: HomeCopy = {
         features: [
           "3 publicaciones por semana, con tu voz",
           "Una voz que configuras una vez y sigue aprendiendo de lo que le aportas",
-          "Tus reuniones y lecturas convertidas en ideas para publicar",
+          "Una fuente conectada (reuniones, notas, lecturas o dictados) convertida en ideas para publicar",
           "Banco de ideas, calendario editorial y programación en LinkedIn",
         ],
       },
@@ -380,7 +368,7 @@ const es: HomeCopy = {
         includesTitle: "Todo lo de Presencia, más:",
         features: [
           "Una publicación cada día",
-          "Todas tus fuentes conectadas: reuniones, notas, lecturas y dictados",
+          "Todas tus fuentes conectadas, no solo una: reuniones, notas, lecturas y dictados",
           "Atención prioritaria",
         ],
         featured: true,

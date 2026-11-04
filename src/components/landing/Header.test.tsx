@@ -19,15 +19,14 @@ describe("Header", () => {
     expect(screen.getByRole("link", { name: "Services" })).toHaveAttribute("href", "/crm-solution#services");
   });
 
-  it("shows the home navigation, without the use-cases menu, on the home page", () => {
+  it("shows a minimal home navigation, without the use-cases menu, on the home page", () => {
     usePathname.mockReturnValue("/");
     render(<Header />);
     expect(screen.getByRole("link", { name: "How it works" })).toHaveAttribute("href", "/#how-it-works");
-    expect(screen.getByRole("link", { name: "Example" })).toHaveAttribute("href", "/#example");
-    expect(screen.getByRole("link", { name: "Integrations" })).toHaveAttribute("href", "/#integrations");
     expect(screen.getByRole("link", { name: "Pricing" })).toHaveAttribute("href", "/#pricing");
-    expect(screen.getByRole("link", { name: "Vision" })).toHaveAttribute("href", "/#vision");
-    expect(screen.getByRole("link", { name: "For sales teams" })).toHaveAttribute("href", "/crm-solution");
+    for (const gone of ["Example", "Integrations", "Vision", "For sales teams"]) {
+      expect(screen.queryByRole("link", { name: gone })).toBeNull();
+    }
     expect(screen.queryByRole("button", { name: /Use cases/ })).toBeNull();
   });
 
