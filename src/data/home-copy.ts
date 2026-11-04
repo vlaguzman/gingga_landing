@@ -163,7 +163,7 @@ const en: HomeCopy = {
     ],
   },
   pricing: {
-    title: "Pick the rhythm that fits you.",
+    title: "Pick the frequency that fits you.",
     lead: "A flat monthly fee. Your agents work for you all month, so you show up consistently even when you're busy.",
     perMonth: "/ month",
     billing: "Flat monthly fee.",
@@ -172,7 +172,7 @@ const en: HomeCopy = {
       {
         name: "Presence",
         tag: "To get noticed",
-        tagline: "A steady rhythm: 3 posts a week.",
+        tagline: "A steady frequency: 3 posts a week.",
         price: "$29",
         cta: "Choose Presence",
         includesTitle: "Includes:",
@@ -184,11 +184,11 @@ const en: HomeCopy = {
         ],
       },
       {
-        name: "Studio",
+        name: "Rhythm",
         tag: "To be the reference",
         tagline: "Daily presence. A personal brand, done properly.",
         price: "$79",
-        cta: "Choose Studio",
+        cta: "Choose Rhythm",
         includesTitle: "Everything in Presence, plus:",
         features: [
           "A post every day",
@@ -204,7 +204,7 @@ const en: HomeCopy = {
         tagline: "Your voice at the pace of a content team.",
         price: "$148",
         cta: "Choose Authority",
-        includesTitle: "Everything in Studio, plus:",
+        includesTitle: "Everything in Rhythm, plus:",
         features: [
           "Early access to X and Instagram as they launch",
           "Early access to WhatsApp agents and the GINGGA CRM",
@@ -355,7 +355,7 @@ const es: HomeCopy = {
     ],
   },
   pricing: {
-    title: "Elige el ritmo que va contigo.",
+    title: "Elige la frecuencia que va contigo.",
     lead: "Una tarifa fija al mes. Tus agentes trabajan para ti todo el mes, así apareces con constancia incluso cuando estás ocupado.",
     perMonth: "/ mes",
     billing: "Tarifa fija mensual.",
@@ -364,7 +364,7 @@ const es: HomeCopy = {
       {
         name: "Presencia",
         tag: "Para que te noten",
-        tagline: "Un ritmo constante: 3 publicaciones por semana.",
+        tagline: "Una frecuencia constante: 3 publicaciones por semana.",
         price: "$29",
         cta: "Elegir Presencia",
         includesTitle: "Incluye:",
@@ -376,11 +376,11 @@ const es: HomeCopy = {
         ],
       },
       {
-        name: "Estudio",
+        name: "Ritmo",
         tag: "Para ser referente",
         tagline: "Presencia diaria. Tu marca personal, en serio.",
         price: "$79",
-        cta: "Elegir Estudio",
+        cta: "Elegir Ritmo",
         includesTitle: "Todo lo de Presencia, más:",
         features: [
           "Una publicación cada día",
@@ -393,10 +393,10 @@ const es: HomeCopy = {
       {
         name: "Autoridad",
         tag: "Para liderar la conversación",
-        tagline: "Tu voz al ritmo de un equipo de contenido.",
+        tagline: "Tu voz a la frecuencia de un equipo de contenido.",
         price: "$148",
         cta: "Elegir Autoridad",
-        includesTitle: "Todo lo de Estudio, más:",
+        includesTitle: "Todo lo de Ritmo, más:",
         features: [
           "Acceso anticipado a X e Instagram cuando se lancen",
           "Acceso anticipado a los agentes de WhatsApp y al CRM de GINGGA",
