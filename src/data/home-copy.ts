@@ -182,7 +182,6 @@ const en: HomeCopy = {
           "Idea bank and editorial calendar",
           "Schedule and share on LinkedIn",
         ],
-        featured: true,
       },
       {
         name: "Studio",
@@ -197,6 +196,7 @@ const en: HomeCopy = {
           "A voice that keeps learning from everything you feed it",
           "Priority support",
         ],
+        featured: true,
       },
       {
         name: "Authority",
@@ -374,7 +374,6 @@ const es: HomeCopy = {
           "Banco de ideas y calendario editorial",
           "Programa y comparte en LinkedIn",
         ],
-        featured: true,
       },
       {
         name: "Estudio",
@@ -389,6 +388,7 @@ const es: HomeCopy = {
           "Una voz que sigue aprendiendo de todo lo que le aportas",
           "Atención prioritaria",
         ],
+        featured: true,
       },
       {
         name: "Autoridad",

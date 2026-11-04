@@ -82,6 +82,9 @@ describe.each(LANGS)("home sections (%s)", (lang) => {
     const tiers = screen.getAllByRole("article");
     expect(tiers.map((t) => within(t).getByRole("heading").textContent)).toEqual(c.pricing.tiers.map((t) => t.name));
     expect(container.querySelectorAll(".plan--featured")).toHaveLength(1);
+    expect(within(container.querySelector(".plan--featured") as HTMLElement).getByRole("heading").textContent).toBe(
+      c.pricing.tiers[1].name,
+    );
     expect(screen.getAllByText(c.pricing.perMonth)).toHaveLength(3);
     expect(screen.getByText(c.pricing.compare)).toBeInTheDocument();
   });
