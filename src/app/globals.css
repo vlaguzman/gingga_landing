@@ -1886,7 +1886,7 @@ button:focus-visible {
 
 @media (min-width: 900px) {
   .home-vision__grid {
-    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 }
 
@@ -1905,13 +1905,6 @@ button:focus-visible {
   background: var(--lilac);
 }
 
-.home-vision__now h3 {
-  font-size: 24px;
-  line-height: 1.2;
-  letter-spacing: -0.015em;
-  font-weight: 700;
-}
-
 .home-vision__next {
   background: var(--white);
 }
@@ -1924,11 +1917,36 @@ button:focus-visible {
   color: var(--text-3);
 }
 
-.home-vision__loop {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+.home-vision__loop,
+.home-vision__today {
+  display: flex;
+  flex-direction: column;
   gap: 20px;
   width: 100%;
+}
+
+.home-vision__today li {
+  display: flex;
+  gap: 14px;
+}
+
+.home-vision__today .icon {
+  width: 22px;
+  height: 22px;
+  margin-top: 2px;
+  color: var(--violet-deep);
+}
+
+.home-vision__today h3 {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.home-vision__today p {
+  margin-top: 4px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text-2);
 }
 
 .home-vision__loop li {
@@ -1961,14 +1979,6 @@ button:focus-visible {
   color: var(--text-2);
 }
 
-.home-vision__crm {
-  font-size: 17px;
-  color: var(--text-2);
-}
-
-.home-vision__crm a {
-  font-weight: 700;
-}
 
 .site-nav .site-nav__lang {
   margin-left: auto;

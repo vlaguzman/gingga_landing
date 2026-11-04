@@ -21,7 +21,8 @@ describe("homeCopy", () => {
     expect(es.hero.ideas).toHaveLength(en.hero.ideas.length);
     expect(es.points.items).toHaveLength(en.points.items.length);
     expect(es.faq.items).toHaveLength(en.faq.items.length);
-    expect(es.vision.loop).toHaveLength(en.vision.loop.length);
+    expect(es.vision.today).toHaveLength(en.vision.today.length);
+    expect(es.vision.next).toHaveLength(en.vision.next.length);
     expect(es.integrations.groups.map((g) => g.tools)).toEqual(en.integrations.groups.map((g) => g.tools));
   });
 });
@@ -83,8 +84,9 @@ describe.each(LANGS)("home sections (%s)", (lang) => {
   it("roadmap is the #vision target and links to the CRM solution", () => {
     const { container } = render(<Roadmap lang={lang} />);
     expect(container.querySelector("section#vision")).not.toBeNull();
-    expect(screen.getByText(c.vision.today)).toBeInTheDocument();
-    expect(screen.getAllByRole("listitem")).toHaveLength(4);
+    expect(screen.getByText(c.vision.todayLabel)).toBeInTheDocument();
+    expect(screen.getByText(c.vision.nextLabel)).toBeInTheDocument();
+    expect(screen.getAllByRole("listitem")).toHaveLength(c.vision.today.length + c.vision.next.length);
     expect(screen.getByRole("link", { name: c.vision.crmLink })).toHaveAttribute("href", "/crm-solution");
   });
 });

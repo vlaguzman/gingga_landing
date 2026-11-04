@@ -46,11 +46,10 @@ export type HomeCopy = {
   vision: {
     title: string;
     lead: string;
-    today: string;
-    todayTitle: string;
-    soon: string;
-    loop: readonly { title: string; text: string }[];
-    crmPrefix: string;
+    todayLabel: string;
+    today: readonly { title: string; text: string }[];
+    nextLabel: string;
+    next: readonly { title: string; text: string; crm?: boolean }[];
     crmLink: string;
   };
   cta: { title: string; lead: string; label: string };
@@ -97,7 +96,7 @@ const en: HomeCopy = {
       },
       {
         title: "Add your voice",
-        text: "Turn an idea into a LinkedIn draft. Edit it, then publish when you're happy.",
+        text: "Turn an idea into a LinkedIn draft. Edit it, then publish or schedule it when you're happy.",
       },
     ],
   },
@@ -152,7 +151,7 @@ const en: HomeCopy = {
       },
       {
         q: "What can I do at the start?",
-        a: "Create LinkedIn content from your conversations, notes and reading. WhatsApp, Instagram and managed conversations are next steps, not part of today's product.",
+        a: "Turn your conversations, notes and reading into post ideas, set up a voice that learns, and write, share or schedule on LinkedIn. X, Instagram, WhatsApp agents and the CRM come next.",
       },
       {
         q: "Does publishing content validate my idea?",
@@ -161,18 +160,31 @@ const en: HomeCopy = {
     ],
   },
   vision: {
-    title: "Your voice is the start. The vision goes further.",
-    lead: "We want to connect content, conversations and learning in one system. Instagram, WhatsApp and managed conversations are part of that direction.",
-    today: "Available today",
-    todayTitle: "LinkedIn content from your own conversations.",
-    soon: "Where we’re heading",
-    loop: [
-      { title: "Define your voice", text: "Who you are, what you know and who you want to help." },
-      { title: "Create and share", text: "Turn your ideas into content that represents you." },
-      { title: "Talk and connect", text: "Hear the questions, needs and objections." },
-      { title: "Learn and adjust", text: "Bring what you learn into your next message and offer." },
+    title: "Your voice is the start. Here is what comes next.",
+    lead: "Today GINGGA takes you from a conversation to a scheduled LinkedIn post. Next, it brings your other channels and your sales conversations into the same system.",
+    todayLabel: "Available today",
+    today: [
+      {
+        title: "Ideas from your conversations",
+        text: "Agents pull in your meetings, notes and reading and turn them into ideas for posts.",
+      },
+      {
+        title: "A voice that learns",
+        text: "Set up your voice. The more you feed it, the better it sounds like you.",
+      },
+      { title: "Create", text: "Write new posts from your ideas, in your own voice." },
+      { title: "Share and schedule", text: "Publish on LinkedIn straight away or schedule it for later." },
     ],
-    crmPrefix: "Already handling leads and enquiries?",
+    nextLabel: "What comes next",
+    next: [
+      { title: "More networks", text: "Bring your voice and ideas to X and Instagram." },
+      { title: "Agents on your WhatsApp", text: "Agents that talk in your WhatsApp, on your behalf." },
+      {
+        title: "Your CRM",
+        text: "Keep the conversations that follow in one place, so no lead or enquiry gets lost.",
+        crm: true,
+      },
+    ],
     crmLink: "See the GINGGA CRM solution",
   },
   cta: {
@@ -223,7 +235,7 @@ const es: HomeCopy = {
       },
       {
         title: "Ponle tu voz",
-        text: "Convierte una idea en un borrador para LinkedIn. Ajústalo y publícalo cuando estés conforme.",
+        text: "Convierte una idea en un borrador para LinkedIn. Ajústalo y publícalo o prográmalo cuando estés conforme.",
       },
     ],
   },
@@ -278,7 +290,7 @@ const es: HomeCopy = {
       },
       {
         q: "¿Qué puedo hacer inicialmente?",
-        a: "Crear contenido para LinkedIn a partir de tus conversaciones, notas y lecturas. WhatsApp, Instagram y la gestión integrada de conversaciones son próximos pasos, no forman parte del producto de hoy.",
+        a: "Convertir tus conversaciones, notas y lecturas en ideas para publicar, configurar una voz que aprende, y escribir, compartir o programar en LinkedIn. X, Instagram, agentes en WhatsApp y el CRM vienen después.",
       },
       {
         q: "¿Publicar contenido valida mi idea?",
@@ -287,18 +299,31 @@ const es: HomeCopy = {
     ],
   },
   vision: {
-    title: "Tu voz es el comienzo. La visión va más allá.",
-    lead: "Queremos conectar contenido, conversaciones y aprendizaje en un mismo sistema. Instagram, WhatsApp y la gestión integrada de conversaciones forman parte de esa dirección.",
-    today: "Disponible hoy",
-    todayTitle: "Contenido para LinkedIn a partir de tus propias conversaciones.",
-    soon: "Hacia dónde vamos",
-    loop: [
-      { title: "Define tu voz", text: "Quién eres, qué sabes y a quién quieres ayudar." },
-      { title: "Crea y comparte", text: "Convierte tus ideas en contenido que te represente." },
-      { title: "Conversa y conecta", text: "Escucha preguntas, necesidades y objeciones." },
-      { title: "Aprende y ajusta", text: "Lleva lo aprendido a tu próximo mensaje y propuesta." },
+    title: "Tu voz es el comienzo. Esto es lo que viene.",
+    lead: "Hoy GINGGA te lleva de una conversación a una publicación programada en LinkedIn. Después, suma tus otros canales y tus conversaciones de ventas en el mismo sistema.",
+    todayLabel: "Disponible hoy",
+    today: [
+      {
+        title: "Ideas desde tus conversaciones",
+        text: "Los agentes traen tus reuniones, notas y lecturas y las convierten en ideas para publicar.",
+      },
+      {
+        title: "Una voz que aprende",
+        text: "Configura tu voz. Cuanto más la nutres, más suena como tú.",
+      },
+      { title: "Crea", text: "Escribe nuevas publicaciones a partir de tus ideas, con tu propia voz." },
+      { title: "Comparte y programa", text: "Publica en LinkedIn al momento o prográmalo para después." },
     ],
-    crmPrefix: "¿Ya gestionas leads y consultas?",
+    nextLabel: "Lo que sigue",
+    next: [
+      { title: "Más redes", text: "Lleva tu voz y tus ideas a X e Instagram." },
+      { title: "Agentes en tu WhatsApp", text: "Agentes que hablan en tu WhatsApp, en tu nombre." },
+      {
+        title: "Tu CRM",
+        text: "Mantén en un solo lugar las conversaciones que siguen, para que no se pierda ningún lead ni consulta.",
+        crm: true,
+      },
+    ],
     crmLink: "Conoce la solución CRM de GINGGA (en inglés)",
   },
   cta: {
