@@ -1,48 +1,32 @@
 import type { Metadata } from "next";
-import { BenefitCards } from "@/components/landing/BenefitCards";
 import { DemoCta } from "@/components/landing/DemoCta";
-import { DemoSelector } from "@/components/landing/DemoSelector";
-import { Hero } from "@/components/landing/Hero";
-import { ManagedService } from "@/components/landing/ManagedService";
-import { Services } from "@/components/landing/Services";
-import { resolveVideo } from "@/lib/video-assets";
+import { ContentExample } from "@/components/landing/home/ContentExample";
+import { HomeFaq } from "@/components/landing/home/HomeFaq";
+import { HomeHero } from "@/components/landing/home/HomeHero";
+import { HomeHowItWorks } from "@/components/landing/home/HomeHowItWorks";
+import { Integrations } from "@/components/landing/home/Integrations";
+import { Roadmap } from "@/components/landing/home/Roadmap";
+import { StartingPoints } from "@/components/landing/home/StartingPoints";
 
 export const metadata: Metadata = {
-  title: "GINGGA | More sales from the leads you already have",
+  title: "GINGGA | Give a voice to your ideas and your experience",
   description:
-    "AI agents that respond, qualify and follow up, so you can focus on closing. Set up, managed and continuously improved by GINGGA.",
+    "GINGGA connects to your meeting notes, reading and voice notes, finds the ideas worth sharing and turns them into LinkedIn drafts in your own voice.",
 };
 
-const benefits = [
-  {
-    title: "Respond while interest is fresh.",
-    text: "Start the conversation when a lead gets in touch, even when you're busy.",
-  },
-  {
-    title: "Make follow-up consistent.",
-    text: "Keep track of unanswered questions, missing information and the next step.",
-  },
-  {
-    title: "Step in with context.",
-    text: "See what each prospect needs and what has already been discussed.",
-  },
-];
-
 export default function HomePage() {
-  const videos = {
-    "student-recruitment": resolveVideo("student-recruitment"),
-    "property-sales": resolveVideo("property-sales"),
-  };
   return (
     <>
-      <Hero />
-      <DemoSelector videos={videos} />
-      <BenefitCards heading="Keep more opportunities moving." items={benefits} />
-      <ManagedService />
-      <Services />
+      <HomeHero />
+      <HomeHowItWorks />
+      <ContentExample />
+      <Integrations />
+      <StartingPoints />
+      <HomeFaq />
+      <Roadmap />
       <DemoCta
-        title="What happens to your leads after the first enquiry?"
-        lead="Show us your current process. We'll show you where GINGGA could help."
+        title="Your experience deserves more than your notes app."
+        lead="Connect your sources and find content ideas in what you already talk about, read and learn."
       />
     </>
   );
