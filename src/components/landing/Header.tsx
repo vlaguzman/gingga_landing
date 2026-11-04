@@ -90,7 +90,7 @@ export function Header() {
             <Link href={CRM_SECTIONS.services}>Services</Link>
           </nav>
         ) : (
-          <nav className="site-nav" aria-label="Main">
+          <nav className="site-nav site-nav--home" aria-label="Main">
             <Link href={sections.howItWorks}>{copy.howItWorks}</Link>
             <Link href={sections.example}>{copy.example}</Link>
             <Link href={sections.integrations}>{copy.integrations}</Link>

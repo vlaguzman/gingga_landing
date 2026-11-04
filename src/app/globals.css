@@ -241,6 +241,7 @@ a:focus-visible {
 
 .site-nav a,
 .site-nav__toggle {
+  white-space: nowrap;
   color: var(--on-dark-2);
   text-decoration: none;
 }
@@ -1971,4 +1972,21 @@ button:focus-visible {
   border: 1.5px solid var(--line);
   border-radius: 999px;
   font-size: 14px;
+}
+
+.site-nav--home {
+  gap: 12px 20px;
+}
+
+@media (max-width: 1100px) {
+  .site-header__inner:has(.site-nav--home) {
+    flex-wrap: wrap;
+    row-gap: 12px;
+  }
+
+  .site-nav--home {
+    order: 3;
+    flex: 1 0 100%;
+    flex-wrap: wrap;
+  }
 }

@@ -182,7 +182,7 @@ const es: HomeCopy = {
     example: "Ejemplo",
     integrations: "Integraciones",
     vision: "Visión",
-    crm: "Para equipos de ventas",
+    crm: "Para ventas",
     bookDemo: "Reservar una demo",
     switchTo: "English",
     switchLabel: "View this page in English",
