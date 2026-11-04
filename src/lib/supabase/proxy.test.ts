@@ -58,6 +58,25 @@ describe("updateSession", () => {
     });
   });
 
+  describe("public pages", () => {
+    it.each(["/", "/es", "/crm-solution", "/student-recruitment", "/chatsfoo"])(
+      "lets %s through without calling Supabase",
+      async (path) => {
+        const res = await updateSession(req(path));
+
+        expect(res.headers.get("x-middleware-next")).toBe("1");
+        expect(getUser).not.toHaveBeenCalled();
+      },
+    );
+
+    it.each(["/today-dashboard", "/login"])("still validates the session on %s", async (path) => {
+      signedOut();
+      await updateSession(req(path));
+
+      expect(getUser).toHaveBeenCalledOnce();
+    });
+  });
+
   describe("signed-in users", () => {
     beforeEach(signedIn);
 

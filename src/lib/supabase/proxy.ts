@@ -23,6 +23,13 @@ function isProtected(pathname: string) {
  * This is NOT the security boundary: pages and data access must re-check with getUser().
  */
 export async function updateSession(request: NextRequest) {
+  // Public pages (landing, /es, /crm-solution...) never need the session, so they must not wait on Supabase.
+  // Protected routes and /login still validate it below, and pages re-check with getUser() themselves.
+  const { pathname } = request.nextUrl;
+  if (!isProtected(pathname) && pathname !== "/login") {
+    return NextResponse.next({ request });
+  }
+
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(
@@ -48,8 +55,6 @@ export async function updateSession(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  const { pathname } = request.nextUrl;
 
   if (!user && isProtected(pathname)) {
     const url = request.nextUrl.clone();
