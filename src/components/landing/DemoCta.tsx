@@ -6,9 +6,10 @@ type Props = {
   title: string;
   lead: string;
   label?: string;
+  lang?: "en" | "es";
 };
 
-export function DemoCta({ sector, title, lead, label }: Props) {
+export function DemoCta({ sector, title, lead, label, lang }: Props) {
   return (
     <section id="book-a-demo" className="section--dark cta">
       <div className="container cta__inner">
@@ -16,7 +17,7 @@ export function DemoCta({ sector, title, lead, label }: Props) {
           <h2>{title}</h2>
           <p className="cta__lead">{lead}</p>
           <div>
-            <a className="btn" href={demoHref(sector)}>
+            <a className="btn" href={demoHref(sector, undefined, lang)}>
               {label ?? (sector ? SECTORS[sector].demoLabel : "Book a demo")}
             </a>
           </div>

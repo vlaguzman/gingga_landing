@@ -1,5 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { CRM_SECTIONS, demoHref, HOME_SECTIONS, isCrmPath, SECTORS, sectorFromPathname } from "./demo";
+import {
+  CRM_SECTIONS,
+  demoHref,
+  homeLangFromPathname,
+  homePath,
+  homeSections,
+  isCrmPath,
+  SECTORS,
+  sectorFromPathname,
+} from "./demo";
 
 function decodedText(href: string): string {
   return new URL(href).searchParams.get("text") ?? "";
@@ -54,8 +63,9 @@ describe("sectorFromPathname", () => {
 });
 
 describe("constants", () => {
-  it("keeps home section links rooted at the home page", () => {
-    for (const href of Object.values(HOME_SECTIONS)) expect(href).toMatch(/^\/#/);
+  it("roots home section links at the home page of each language", () => {
+    for (const href of Object.values(homeSections("en"))) expect(href).toMatch(/^\/#/);
+    for (const href of Object.values(homeSections("es"))) expect(href).toMatch(/^\/es#/);
   });
 
   it("keeps CRM section links rooted at the CRM solution page", () => {
@@ -78,5 +88,21 @@ describe("isCrmPath", () => {
     expect(isCrmPath("/")).toBe(false);
     expect(isCrmPath(null)).toBe(false);
     expect(isCrmPath("/login")).toBe(false);
+  });
+});
+
+describe("home language helpers", () => {
+  it("maps languages to paths and back", () => {
+    expect(homePath("en")).toBe("/");
+    expect(homePath("es")).toBe("/es");
+    expect(homeLangFromPathname("/")).toBe("en");
+    expect(homeLangFromPathname("/es")).toBe("es");
+    expect(homeLangFromPathname("/crm-solution")).toBeUndefined();
+    expect(homeLangFromPathname(null)).toBeUndefined();
+  });
+
+  it("writes the booking message in Spanish when asked", () => {
+    expect(decodedText(demoHref(undefined, undefined, "es"))).toContain("quiero reservar una demo");
+    expect(decodedText(demoHref(undefined, "Convert", "es"))).toContain("Servicio de interés: Convert");
   });
 });

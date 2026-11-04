@@ -1964,3 +1964,11 @@ button:focus-visible {
 .home-vision__crm a {
   font-weight: 700;
 }
+
+.site-nav .site-nav__lang {
+  margin-left: auto;
+  padding: 4px 12px;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  font-size: 14px;
+}

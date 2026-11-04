@@ -8,18 +8,25 @@ import {
   CRM_PATH,
   CRM_SECTIONS,
   demoHref,
-  HOME_SECTIONS,
+  homeLangFromPathname,
+  homePath,
+  homeSections,
   isCrmPath,
   SECTORS,
   sectorFromPathname,
   type SectorId,
 } from "@/lib/demo";
+import { homeCopy } from "@/data/home-copy";
 import { Icon } from "./Icon";
 
 export function Header() {
   const pathname = usePathname();
   const sector = sectorFromPathname(pathname);
   const crm = isCrmPath(pathname);
+  const lang = homeLangFromPathname(pathname) ?? "en";
+  const copy = homeCopy[lang].nav;
+  const sections = homeSections(lang);
+  const other = lang === "es" ? "en" : "es";
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -36,7 +43,7 @@ export function Header() {
   return (
     <header className="site-header">
       <div className="container site-header__inner">
-        <Link className="site-header__logo" href="/" aria-label="GINGGA home">
+        <Link className="site-header__logo" href={homePath(lang)} aria-label="GINGGA home">
           <Image src="/assets/logo.png" alt="GINGGA" width={1797} height={307} priority />
         </Link>
         {crm ? (
@@ -84,15 +91,24 @@ export function Header() {
           </nav>
         ) : (
           <nav className="site-nav" aria-label="Main">
-            <Link href={HOME_SECTIONS.howItWorks}>How it works</Link>
-            <Link href={HOME_SECTIONS.example}>Example</Link>
-            <Link href={HOME_SECTIONS.integrations}>Integrations</Link>
-            <Link href={HOME_SECTIONS.vision}>Vision</Link>
-            <Link href={CRM_PATH}>For sales teams</Link>
+            <Link href={sections.howItWorks}>{copy.howItWorks}</Link>
+            <Link href={sections.example}>{copy.example}</Link>
+            <Link href={sections.integrations}>{copy.integrations}</Link>
+            <Link href={sections.vision}>{copy.vision}</Link>
+            <Link href={CRM_PATH}>{copy.crm}</Link>
+            <Link
+              className="site-nav__lang"
+              href={homePath(other)}
+              hrefLang={other}
+              lang={other}
+              aria-label={copy.switchLabel}
+            >
+              {copy.switchTo}
+            </Link>
           </nav>
         )}
-        <a className="btn btn--sm" href={demoHref(sector)}>
-          Book a demo
+        <a className="btn btn--sm" href={demoHref(sector, undefined, lang)}>
+          {crm ? "Book a demo" : copy.bookDemo}
         </a>
       </div>
     </header>

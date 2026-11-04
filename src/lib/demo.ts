@@ -20,10 +20,11 @@ export const SECTORS: Record<SectorId, { label: string; path: string; demoLabel:
 const BOOKING_BASE = "https://wa.me/447551273933";
 
 /** Single source of truth for every "Book a demo" / "Discuss ..." link. */
-export function demoHref(sector?: SectorId, topic?: string): string {
-  const lines = ["Hello GINGGA, I'd like to book a demo."];
+export function demoHref(sector?: SectorId, topic?: string, lang: "en" | "es" = "en"): string {
+  const es = lang === "es";
+  const lines = [es ? "Hola GINGGA, quiero reservar una demo." : "Hello GINGGA, I'd like to book a demo."];
   if (sector) lines.push(`Sector: ${SECTORS[sector].label}`);
-  if (topic) lines.push(`Service of interest: ${topic}`);
+  if (topic) lines.push(`${es ? "Servicio de interés" : "Service of interest"}: ${topic}`);
   return `${BOOKING_BASE}?text=${encodeURIComponent(lines.join("\n"))}`;
 }
 
@@ -42,13 +43,28 @@ export const CRM_SECTIONS = {
   demo: `${CRM_PATH}#demo`,
 } as const;
 
-/** Home page (content voice) section links, valid from any route. */
-export const HOME_SECTIONS = {
-  howItWorks: "/#how-it-works",
-  example: "/#example",
-  integrations: "/#integrations",
-  vision: "/#vision",
-} as const;
+/** Home page path for a language. */
+export function homePath(lang: "en" | "es"): string {
+  return lang === "es" ? "/es" : "/";
+}
+
+/** Home section links for a language, valid from any route. */
+export function homeSections(lang: "en" | "es") {
+  const base = homePath(lang) === "/" ? "/" : "/es";
+  return {
+    howItWorks: `${base}#how-it-works`,
+    example: `${base}#example`,
+    integrations: `${base}#integrations`,
+    vision: `${base}#vision`,
+  };
+}
+
+/** Language of a home-page path, or undefined when the path is not a home page. */
+export function homeLangFromPathname(pathname: string | null): "en" | "es" | undefined {
+  if (pathname === "/") return "en";
+  if (pathname === "/es") return "es";
+  return undefined;
+}
 
 /** True for the CRM solution page and the sector pages that belong to it. */
 export function isCrmPath(pathname: string | null): boolean {

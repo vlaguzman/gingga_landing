@@ -1,25 +1,13 @@
-const points = [
-  {
-    title: "Explore an offer",
-    text: "Start from the problem you want to solve. Share your perspective and open conversations with the people who live it. Their answers help you shape a proposal you can then test.",
-  },
-  {
-    title: "Show your expertise",
-    text: "Turn what you already know into a steady, recognisable presence, without starting each post from a blank page.",
-  },
-  {
-    title: "Give your business a voice",
-    text: "Keep the way your business talks consistent, drawing on the real questions your customers ask.",
-  },
-] as const;
+import { homeCopy, type Lang } from "@/data/home-copy";
 
-export function StartingPoints() {
+export function StartingPoints({ lang }: { lang: Lang }) {
+  const { points } = homeCopy[lang];
   return (
     <section className="section home-points">
       <div className="container stack-48">
-        <h2 className="h2 section-title">One voice of your own. Different places to start.</h2>
+        <h2 className="h2 section-title">{points.title}</h2>
         <ul className="cards">
-          {points.map((point) => (
+          {points.items.map((point) => (
             <li key={point.title} className="feature-card">
               <h3>{point.title}</h3>
               <p>{point.text}</p>

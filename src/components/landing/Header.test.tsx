@@ -30,6 +30,28 @@ describe("Header", () => {
     expect(screen.queryByRole("button", { name: /Use cases/ })).toBeNull();
   });
 
+  it("shows the Spanish navigation, links and language switch on /es", () => {
+    usePathname.mockReturnValue("/es");
+    render(<Header />);
+    expect(screen.getByRole("link", { name: "GINGGA home" })).toHaveAttribute("href", "/es");
+    expect(screen.getByRole("link", { name: "Cómo funciona" })).toHaveAttribute("href", "/es#how-it-works");
+    expect(screen.getByRole("link", { name: "View this page in English" })).toHaveAttribute("href", "/");
+    expect(screen.getByRole("link", { name: "Reservar una demo" })).toHaveAttribute(
+      "href",
+      demoHref(undefined, undefined, "es"),
+    );
+  });
+
+  it("offers a switch to Spanish on the English home and none on CRM pages", () => {
+    usePathname.mockReturnValue("/");
+    const { unmount } = render(<Header />);
+    expect(screen.getByRole("link", { name: "Ver esta página en español" })).toHaveAttribute("href", "/es");
+    unmount();
+    usePathname.mockReturnValue("/crm-solution");
+    render(<Header />);
+    expect(screen.queryByRole("link", { name: "Ver esta página en español" })).toBeNull();
+  });
+
   it("uses the generic booking link outside a sector", () => {
     render(<Header />);
     expect(screen.getByRole("link", { name: "Book a demo" })).toHaveAttribute("href", demoHref());
