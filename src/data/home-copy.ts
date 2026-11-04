@@ -176,12 +176,12 @@ const en: HomeCopy = {
       {
         name: "Rhythm",
         tag: "To become the go-to voice",
-        tagline: "Daily presence. A personal brand, done properly.",
+        tagline: "A strong weekly presence. A personal brand, done properly.",
         price: "$79",
         cta: "Start with Rhythm",
         includesTitle: "Everything in Presence, plus:",
         features: [
-          "A post every day",
+          "5 posts a week, in your voice",
           "All your sources connected, not just one: meetings, notes, reading and dictation",
           "Priority support",
         ],
@@ -195,6 +195,7 @@ const en: HomeCopy = {
         cta: "Start with Authority",
         includesTitle: "Everything in Rhythm, plus:",
         features: [
+          "Up to one post a day",
           "Early access to X and Instagram as they launch",
           "Early access to agents on your WhatsApp and the GINGGA CRM",
           "A setup session to shape your voice with our team",
@@ -362,12 +363,12 @@ const es: HomeCopy = {
       {
         name: "Ritmo",
         tag: "Para ser referente",
-        tagline: "Presencia diaria. Tu marca personal, en serio.",
+        tagline: "Una presencia semanal fuerte. Tu marca personal, en serio.",
         price: "$79",
         cta: "Empezar con Ritmo",
         includesTitle: "Todo lo de Presencia, más:",
         features: [
-          "Una publicación cada día",
+          "5 publicaciones por semana, con tu voz",
           "Todas tus fuentes conectadas, no solo una: reuniones, notas, lecturas y dictados",
           "Atención prioritaria",
         ],
@@ -381,6 +382,7 @@ const es: HomeCopy = {
         cta: "Empezar con Autoridad",
         includesTitle: "Todo lo de Ritmo, más:",
         features: [
+          "Hasta una publicación al día",
           "Acceso anticipado a X e Instagram cuando se lancen",
           "Acceso anticipado a los agentes en tu WhatsApp y al CRM de GINGGA",
           "Una sesión de configuración para afinar tu voz con nuestro equipo",
