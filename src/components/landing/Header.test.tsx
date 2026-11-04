@@ -6,20 +6,31 @@ import { Header } from "./Header";
 const usePathname = vi.fn();
 vi.mock("next/navigation", () => ({ usePathname: () => usePathname() }));
 
-beforeEach(() => usePathname.mockReturnValue("/"));
+beforeEach(() => usePathname.mockReturnValue("/crm-solution"));
 
 const toggle = () => screen.getByRole("button", { name: /Use cases/ });
 const menu = () => document.getElementById("use-cases-menu")!;
 
 describe("Header", () => {
-  it("links home and to the home sections", () => {
+  it("links home and to the CRM solution sections", () => {
     render(<Header />);
     expect(screen.getByRole("link", { name: "GINGGA home" })).toHaveAttribute("href", "/");
-    expect(screen.getByRole("link", { name: "How it works" })).toHaveAttribute("href", "/#how-it-works");
-    expect(screen.getByRole("link", { name: "Services" })).toHaveAttribute("href", "/#services");
+    expect(screen.getByRole("link", { name: "How it works" })).toHaveAttribute("href", "/crm-solution#how-it-works");
+    expect(screen.getByRole("link", { name: "Services" })).toHaveAttribute("href", "/crm-solution#services");
   });
 
-  it("uses the generic booking link on the home page", () => {
+  it("shows the home navigation, without the use-cases menu, on the home page", () => {
+    usePathname.mockReturnValue("/");
+    render(<Header />);
+    expect(screen.getByRole("link", { name: "How it works" })).toHaveAttribute("href", "/#how-it-works");
+    expect(screen.getByRole("link", { name: "Example" })).toHaveAttribute("href", "/#example");
+    expect(screen.getByRole("link", { name: "Integrations" })).toHaveAttribute("href", "/#integrations");
+    expect(screen.getByRole("link", { name: "Vision" })).toHaveAttribute("href", "/#vision");
+    expect(screen.getByRole("link", { name: "For sales teams" })).toHaveAttribute("href", "/crm-solution");
+    expect(screen.queryByRole("button", { name: /Use cases/ })).toBeNull();
+  });
+
+  it("uses the generic booking link outside a sector", () => {
     render(<Header />);
     expect(screen.getByRole("link", { name: "Book a demo" })).toHaveAttribute("href", demoHref());
   });

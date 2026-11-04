@@ -32,9 +32,26 @@ export function sectorFromPathname(pathname: string | null): SectorId | undefine
   return (Object.keys(SECTORS) as SectorId[]).find((id) => pathname === SECTORS[id].path);
 }
 
-/** Home-page section links, valid from any route. */
+/** Path of the sales/CRM solution landing (the previous home page). */
+export const CRM_PATH = "/crm-solution";
+
+/** CRM solution section links, valid from any route. */
+export const CRM_SECTIONS = {
+  howItWorks: `${CRM_PATH}#how-it-works`,
+  services: `${CRM_PATH}#services`,
+  demo: `${CRM_PATH}#demo`,
+} as const;
+
+/** Home page (content voice) section links, valid from any route. */
 export const HOME_SECTIONS = {
   howItWorks: "/#how-it-works",
-  services: "/#services",
-  demo: "/#demo",
+  example: "/#example",
+  integrations: "/#integrations",
+  vision: "/#vision",
 } as const;
+
+/** True for the CRM solution page and the sector pages that belong to it. */
+export function isCrmPath(pathname: string | null): boolean {
+  if (!pathname) return false;
+  return pathname === CRM_PATH || sectorFromPathname(pathname) !== undefined;
+}

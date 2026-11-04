@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { demoHref, HOME_SECTIONS, SECTORS, sectorFromPathname } from "./demo";
+import { CRM_SECTIONS, demoHref, HOME_SECTIONS, isCrmPath, SECTORS, sectorFromPathname } from "./demo";
 
 function decodedText(href: string): string {
   return new URL(href).searchParams.get("text") ?? "";
@@ -58,7 +58,25 @@ describe("constants", () => {
     for (const href of Object.values(HOME_SECTIONS)) expect(href).toMatch(/^\/#/);
   });
 
+  it("keeps CRM section links rooted at the CRM solution page", () => {
+    for (const href of Object.values(CRM_SECTIONS)) expect(href).toMatch(/^\/crm-solution#/);
+  });
+
   it("gives every sector a path starting with a slash", () => {
     for (const s of Object.values(SECTORS)) expect(s.path).toMatch(/^\//);
+  });
+});
+
+describe("isCrmPath", () => {
+  it("is true for the CRM solution page and the sector pages", () => {
+    expect(isCrmPath("/crm-solution")).toBe(true);
+    expect(isCrmPath("/student-recruitment")).toBe(true);
+    expect(isCrmPath("/property-sales")).toBe(true);
+  });
+
+  it("is false for the home page, null and unknown paths", () => {
+    expect(isCrmPath("/")).toBe(false);
+    expect(isCrmPath(null)).toBe(false);
+    expect(isCrmPath("/login")).toBe(false);
   });
 });

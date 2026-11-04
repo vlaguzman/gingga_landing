@@ -20,7 +20,7 @@ export default function LoginPage() {
         <p className="login__lead">Pick up your conversations and pipeline where you left off.</p>
         <LoginForm />
         <p className="login__foot">
-          New to GINGGA? <Link href="/#services">See how it works</Link>
+          New to GINGGA? <Link href="/crm-solution#services">See how it works</Link>
         </p>
       </div>
     </main>
