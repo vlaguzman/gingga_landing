@@ -6,9 +6,6 @@ export function Footer() {
       <div className="container site-footer__inner">
         <div className="site-footer__brand">
           <Image src="/assets/logo.png" alt="GINGGA" width={1797} height={307} />
-          <div className="powered">
-            Powered by <b>Mastil</b>
-          </div>
           <div className="tagline">Let’s learn. Let’s iterate. Let’s grow.</div>
         </div>
         <address className="site-footer__contact">

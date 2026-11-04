@@ -630,14 +630,6 @@ a:focus-visible {
   align-self: flex-start;
 }
 
-.site-footer__brand .powered {
-  font-size: 14px;
-}
-
-.site-footer__brand .powered b {
-  color: var(--white);
-}
-
 .site-footer__brand .tagline {
   font-size: 15px;
   color: var(--on-dark-3);

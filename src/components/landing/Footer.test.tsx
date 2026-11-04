@@ -7,7 +7,7 @@ describe("Footer", () => {
     render(<Footer />);
     expect(screen.getByRole("contentinfo")).toBeInTheDocument();
     expect(screen.getByAltText("GINGGA")).toBeInTheDocument();
-    expect(screen.getByText("Mastil")).toBeInTheDocument();
+    expect(screen.queryByText(/Mastil/)).toBeNull();
     expect(screen.getByRole("link", { name: "+44 7551 273933" })).toHaveAttribute("href", "tel:+447551273933");
   });
 });
