@@ -8,6 +8,7 @@ import { HomeFaq } from "./HomeFaq";
 import { HomeHero } from "./HomeHero";
 import { HomeHowItWorks } from "./HomeHowItWorks";
 import { Integrations } from "./Integrations";
+import { Pricing } from "./Pricing";
 import { Roadmap } from "./Roadmap";
 import { StartingPoints } from "./StartingPoints";
 
@@ -21,6 +22,8 @@ describe("homeCopy", () => {
     expect(es.hero.ideas).toHaveLength(en.hero.ideas.length);
     expect(es.points.items).toHaveLength(en.points.items.length);
     expect(es.faq.items).toHaveLength(en.faq.items.length);
+    expect(es.pricing.tiers.map((t) => t.price)).toEqual(en.pricing.tiers.map((t) => t.price));
+    expect(es.pricing.tiers.map((t) => t.features.length)).toEqual(en.pricing.tiers.map((t) => t.features.length));
     expect(es.vision.today).toHaveLength(en.vision.today.length);
     expect(es.vision.next).toHaveLength(en.vision.next.length);
     expect(es.integrations.groups.map((g) => g.tools)).toEqual(en.integrations.groups.map((g) => g.tools));
@@ -71,6 +74,26 @@ describe.each(LANGS)("home sections (%s)", (lang) => {
     expect(screen.getAllByRole("listitem").map((li) => within(li).getByRole("heading").textContent)).toEqual(
       c.points.items.map((p) => p.title),
     );
+  });
+
+  it("pricing is the #pricing target with three tiers and one featured", () => {
+    const { container } = render(<Pricing lang={lang} />);
+    expect(container.querySelector("section#pricing")).not.toBeNull();
+    const tiers = screen.getAllByRole("article");
+    expect(tiers.map((t) => within(t).getByRole("heading").textContent)).toEqual(c.pricing.tiers.map((t) => t.name));
+    expect(container.querySelectorAll(".plan--featured")).toHaveLength(1);
+    expect(screen.getAllByText(c.pricing.perMonth)).toHaveLength(3);
+    expect(screen.getByText(c.pricing.compare)).toBeInTheDocument();
+  });
+
+  it("pricing links each tier to a booking message in the page language", () => {
+    render(<Pricing lang={lang} />);
+    for (const tier of c.pricing.tiers) {
+      expect(screen.getByRole("link", { name: tier.cta })).toHaveAttribute(
+        "href",
+        demoHref(undefined, tier.name, lang),
+      );
+    }
   });
 
   it("faq renders closed disclosures", () => {

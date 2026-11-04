@@ -94,6 +94,7 @@ export function Header() {
             <Link href={sections.howItWorks}>{copy.howItWorks}</Link>
             <Link href={sections.example}>{copy.example}</Link>
             <Link href={sections.integrations}>{copy.integrations}</Link>
+            <Link href={sections.pricing}>{copy.pricing}</Link>
             <Link href={sections.vision}>{copy.vision}</Link>
             <Link href={CRM_PATH}>{copy.crm}</Link>
             <Link

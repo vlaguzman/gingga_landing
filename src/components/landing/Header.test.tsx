@@ -25,6 +25,7 @@ describe("Header", () => {
     expect(screen.getByRole("link", { name: "How it works" })).toHaveAttribute("href", "/#how-it-works");
     expect(screen.getByRole("link", { name: "Example" })).toHaveAttribute("href", "/#example");
     expect(screen.getByRole("link", { name: "Integrations" })).toHaveAttribute("href", "/#integrations");
+    expect(screen.getByRole("link", { name: "Pricing" })).toHaveAttribute("href", "/#pricing");
     expect(screen.getByRole("link", { name: "Vision" })).toHaveAttribute("href", "/#vision");
     expect(screen.getByRole("link", { name: "For sales teams" })).toHaveAttribute("href", "/crm-solution");
     expect(screen.queryByRole("button", { name: /Use cases/ })).toBeNull();

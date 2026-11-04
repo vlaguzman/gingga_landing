@@ -55,6 +55,7 @@ export function homeSections(lang: "en" | "es") {
     howItWorks: `${base}#how-it-works`,
     example: `${base}#example`,
     integrations: `${base}#integrations`,
+    pricing: `${base}#pricing`,
     vision: `${base}#vision`,
   };
 }

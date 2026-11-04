@@ -5,6 +5,7 @@ import { HomeFaq } from "./HomeFaq";
 import { HomeHero } from "./HomeHero";
 import { HomeHowItWorks } from "./HomeHowItWorks";
 import { Integrations } from "./Integrations";
+import { Pricing } from "./Pricing";
 import { Roadmap } from "./Roadmap";
 import { StartingPoints } from "./StartingPoints";
 
@@ -18,6 +19,7 @@ export function HomeContent({ lang }: { lang: Lang }) {
       <ContentExample lang={lang} />
       <Integrations lang={lang} />
       <StartingPoints lang={lang} />
+      <Pricing lang={lang} />
       <HomeFaq lang={lang} />
       <Roadmap lang={lang} />
       <DemoCta title={cta.title} lead={cta.lead} label={cta.label} lang={lang} />

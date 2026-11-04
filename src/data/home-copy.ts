@@ -5,6 +5,7 @@ export type HomeCopy = {
     howItWorks: string;
     example: string;
     integrations: string;
+    pricing: string;
     vision: string;
     crm: string;
     bookDemo: string;
@@ -42,6 +43,24 @@ export type HomeCopy = {
     groups: readonly { title: string; tools: readonly string[] }[];
   };
   points: { title: string; items: readonly { title: string; text: string }[] };
+  pricing: {
+    title: string;
+    lead: string;
+    perMonth: string;
+    billing: string;
+    popular: string;
+    tiers: readonly {
+      name: string;
+      tag: string;
+      tagline: string;
+      price: string;
+      cta: string;
+      includesTitle: string;
+      features: readonly string[];
+      featured?: boolean;
+    }[];
+    compare: string;
+  };
   faq: { title: string; items: readonly { q: string; a: string }[] };
   vision: {
     title: string;
@@ -60,6 +79,7 @@ const en: HomeCopy = {
     howItWorks: "How it works",
     example: "Example",
     integrations: "Integrations",
+    pricing: "Pricing",
     vision: "Vision",
     crm: "For sales teams",
     bookDemo: "Book a demo",
@@ -142,6 +162,58 @@ const en: HomeCopy = {
       },
     ],
   },
+  pricing: {
+    title: "Pick the rhythm that fits you.",
+    lead: "A flat monthly fee. Your agents work for you all month, so you show up consistently even when you're busy.",
+    perMonth: "/ month",
+    billing: "Flat monthly fee.",
+    popular: "Most popular",
+    tiers: [
+      {
+        name: "Presence",
+        tag: "To get noticed",
+        tagline: "A steady rhythm: 3 posts a week.",
+        price: "$29",
+        cta: "Choose Presence",
+        includesTitle: "Includes:",
+        features: [
+          "3 posts a week, in your voice",
+          "Your meetings and reading become source material",
+          "Idea bank and editorial calendar",
+          "Schedule and share on LinkedIn",
+        ],
+        featured: true,
+      },
+      {
+        name: "Studio",
+        tag: "To be the reference",
+        tagline: "Daily presence. A personal brand, done properly.",
+        price: "$79",
+        cta: "Choose Studio",
+        includesTitle: "Everything in Presence, plus:",
+        features: [
+          "A post every day",
+          "All your sources connected: meetings, notes, reading and dictation",
+          "A voice that keeps learning from everything you feed it",
+          "Priority support",
+        ],
+      },
+      {
+        name: "Authority",
+        tag: "To lead the conversation",
+        tagline: "Your voice at the pace of a content team.",
+        price: "$148",
+        cta: "Choose Authority",
+        includesTitle: "Everything in Studio, plus:",
+        features: [
+          "Early access to X and Instagram as they launch",
+          "Early access to WhatsApp agents and the GINGGA CRM",
+          "A setup session to shape your voice with our team",
+        ],
+      },
+    ],
+    compare: "For comparison, a content team costs $800+ a month.",
+  },
   faq: {
     title: "Before you start",
     items: [
@@ -199,6 +271,7 @@ const es: HomeCopy = {
     howItWorks: "Cómo funciona",
     example: "Ejemplo",
     integrations: "Integraciones",
+    pricing: "Precios",
     vision: "Visión",
     crm: "Para ventas",
     bookDemo: "Reservar una demo",
@@ -280,6 +353,58 @@ const es: HomeCopy = {
         text: "Mantén coherente la manera en que habla tu negocio, apoyándote en las preguntas reales de tus clientes.",
       },
     ],
+  },
+  pricing: {
+    title: "Elige el ritmo que va contigo.",
+    lead: "Una tarifa fija al mes. Tus agentes trabajan para ti todo el mes, así apareces con constancia incluso cuando estás ocupado.",
+    perMonth: "/ mes",
+    billing: "Tarifa fija mensual.",
+    popular: "Más elegido",
+    tiers: [
+      {
+        name: "Presencia",
+        tag: "Para que te noten",
+        tagline: "Un ritmo constante: 3 publicaciones por semana.",
+        price: "$29",
+        cta: "Elegir Presencia",
+        includesTitle: "Incluye:",
+        features: [
+          "3 publicaciones por semana, con tu voz",
+          "Tus reuniones y lecturas se vuelven material",
+          "Banco de ideas y calendario editorial",
+          "Programa y comparte en LinkedIn",
+        ],
+        featured: true,
+      },
+      {
+        name: "Estudio",
+        tag: "Para ser referente",
+        tagline: "Presencia diaria. Tu marca personal, en serio.",
+        price: "$79",
+        cta: "Elegir Estudio",
+        includesTitle: "Todo lo de Presencia, más:",
+        features: [
+          "Una publicación cada día",
+          "Todas tus fuentes conectadas: reuniones, notas, lecturas y dictados",
+          "Una voz que sigue aprendiendo de todo lo que le aportas",
+          "Atención prioritaria",
+        ],
+      },
+      {
+        name: "Autoridad",
+        tag: "Para liderar la conversación",
+        tagline: "Tu voz al ritmo de un equipo de contenido.",
+        price: "$148",
+        cta: "Elegir Autoridad",
+        includesTitle: "Todo lo de Estudio, más:",
+        features: [
+          "Acceso anticipado a X e Instagram cuando se lancen",
+          "Acceso anticipado a los agentes de WhatsApp y al CRM de GINGGA",
+          "Una sesión de configuración para afinar tu voz con nuestro equipo",
+        ],
+      },
+    ],
+    compare: "Como referencia, un equipo de contenido cuesta $800+ al mes.",
   },
   faq: {
     title: "Antes de empezar",
