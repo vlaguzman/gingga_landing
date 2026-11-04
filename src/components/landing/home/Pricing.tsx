@@ -28,7 +28,6 @@ export function Pricing({ lang }: { lang: Lang }) {
                   <strong>{tier.price}</strong>
                   <span>{pricing.perMonth}</span>
                 </div>
-                <span className="plan__from">{pricing.billing}</span>
               </div>
               <a
                 className={tier.featured ? "btn btn--plan btn--cyan" : "btn btn--plan"}
@@ -51,7 +50,7 @@ export function Pricing({ lang }: { lang: Lang }) {
           ))}
         </div>
 
-        <p className="services__note">{pricing.compare}</p>
+        <p className="services__note home-pricing__compare">{pricing.compare}</p>
       </div>
     </section>
   );

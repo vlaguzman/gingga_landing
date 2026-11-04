@@ -47,7 +47,6 @@ export type HomeCopy = {
     title: string;
     lead: string;
     perMonth: string;
-    billing: string;
     popular: string;
     tiers: readonly {
       name: string;
@@ -163,10 +162,9 @@ const en: HomeCopy = {
     ],
   },
   pricing: {
-    title: "Pick the frequency that fits you.",
-    lead: "A flat monthly fee. Your agents work for you all month, so you show up consistently even when you're busy.",
+    title: "Choose how often you want to show up.",
+    lead: "One flat monthly fee. Your agents work for you all month, so you stay visible even in your busiest weeks.",
     perMonth: "/ month",
-    billing: "Flat monthly fee.",
     popular: "Most popular",
     tiers: [
       {
@@ -174,26 +172,25 @@ const en: HomeCopy = {
         tag: "To get noticed",
         tagline: "A steady frequency: 3 posts a week.",
         price: "$29",
-        cta: "Choose Presence",
+        cta: "Start with Presence",
         includesTitle: "Includes:",
         features: [
           "3 posts a week, in your voice",
-          "Your meetings and reading become source material",
-          "Idea bank and editorial calendar",
-          "Schedule and share on LinkedIn",
+          "A voice you set up once and that keeps learning from what you feed it",
+          "Your meetings and reading turned into post ideas",
+          "Idea bank, editorial calendar and LinkedIn scheduling",
         ],
       },
       {
         name: "Rhythm",
-        tag: "To be the reference",
+        tag: "To become the go-to voice",
         tagline: "Daily presence. A personal brand, done properly.",
         price: "$79",
-        cta: "Choose Rhythm",
+        cta: "Start with Rhythm",
         includesTitle: "Everything in Presence, plus:",
         features: [
           "A post every day",
           "All your sources connected: meetings, notes, reading and dictation",
-          "A voice that keeps learning from everything you feed it",
           "Priority support",
         ],
         featured: true,
@@ -201,18 +198,18 @@ const en: HomeCopy = {
       {
         name: "Authority",
         tag: "To lead the conversation",
-        tagline: "Your voice at the pace of a content team.",
+        tagline: "Your voice on every channel, first in line.",
         price: "$148",
-        cta: "Choose Authority",
+        cta: "Start with Authority",
         includesTitle: "Everything in Rhythm, plus:",
         features: [
           "Early access to X and Instagram as they launch",
-          "Early access to WhatsApp agents and the GINGGA CRM",
+          "Early access to agents on your WhatsApp and the GINGGA CRM",
           "A setup session to shape your voice with our team",
         ],
       },
     ],
-    compare: "For comparison, a content team costs $800+ a month.",
+    compare: "For context: a content team costs $800+ a month. Here, it starts at $29.",
   },
   faq: {
     title: "Before you start",
@@ -355,10 +352,9 @@ const es: HomeCopy = {
     ],
   },
   pricing: {
-    title: "Elige la frecuencia que va contigo.",
-    lead: "Una tarifa fija al mes. Tus agentes trabajan para ti todo el mes, así apareces con constancia incluso cuando estás ocupado.",
+    title: "Elige con qué frecuencia quieres aparecer.",
+    lead: "Una tarifa fija al mes. Tus agentes trabajan para ti todo el mes, así sigues visible incluso en tus semanas más ocupadas.",
     perMonth: "/ mes",
-    billing: "Tarifa fija mensual.",
     popular: "Más elegido",
     tiers: [
       {
@@ -366,13 +362,13 @@ const es: HomeCopy = {
         tag: "Para que te noten",
         tagline: "Una frecuencia constante: 3 publicaciones por semana.",
         price: "$29",
-        cta: "Elegir Presencia",
+        cta: "Empezar con Presencia",
         includesTitle: "Incluye:",
         features: [
           "3 publicaciones por semana, con tu voz",
-          "Tus reuniones y lecturas se vuelven material",
-          "Banco de ideas y calendario editorial",
-          "Programa y comparte en LinkedIn",
+          "Una voz que configuras una vez y sigue aprendiendo de lo que le aportas",
+          "Tus reuniones y lecturas convertidas en ideas para publicar",
+          "Banco de ideas, calendario editorial y programación en LinkedIn",
         ],
       },
       {
@@ -380,12 +376,11 @@ const es: HomeCopy = {
         tag: "Para ser referente",
         tagline: "Presencia diaria. Tu marca personal, en serio.",
         price: "$79",
-        cta: "Elegir Ritmo",
+        cta: "Empezar con Ritmo",
         includesTitle: "Todo lo de Presencia, más:",
         features: [
           "Una publicación cada día",
           "Todas tus fuentes conectadas: reuniones, notas, lecturas y dictados",
-          "Una voz que sigue aprendiendo de todo lo que le aportas",
           "Atención prioritaria",
         ],
         featured: true,
@@ -393,18 +388,18 @@ const es: HomeCopy = {
       {
         name: "Autoridad",
         tag: "Para liderar la conversación",
-        tagline: "Tu voz a la frecuencia de un equipo de contenido.",
+        tagline: "Tu voz en todos los canales, primero en la fila.",
         price: "$148",
-        cta: "Elegir Autoridad",
+        cta: "Empezar con Autoridad",
         includesTitle: "Todo lo de Ritmo, más:",
         features: [
           "Acceso anticipado a X e Instagram cuando se lancen",
-          "Acceso anticipado a los agentes de WhatsApp y al CRM de GINGGA",
+          "Acceso anticipado a los agentes en tu WhatsApp y al CRM de GINGGA",
           "Una sesión de configuración para afinar tu voz con nuestro equipo",
         ],
       },
     ],
-    compare: "Como referencia, un equipo de contenido cuesta $800+ al mes.",
+    compare: "Como referencia: un equipo de contenido cuesta $800+ al mes. Aquí, empieza en $29.",
   },
   faq: {
     title: "Antes de empezar",

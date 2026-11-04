@@ -2035,3 +2035,11 @@ button:focus-visible {
 .plan--featured .home-plan__tag {
   color: var(--cyan);
 }
+
+.services__note.home-pricing__compare {
+  max-width: none;
+  text-align: center;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text);
+}
