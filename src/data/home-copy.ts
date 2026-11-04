@@ -35,7 +35,12 @@ export type HomeCopy = {
     draftText: string;
     note: string;
   };
-  integrations: { title: string; lead: string; groups: readonly { title: string; tools: readonly string[] }[] };
+  integrations: {
+    title: string;
+    lead: string;
+    note: string;
+    groups: readonly { title: string; tools: readonly string[] }[];
+  };
   points: { title: string; items: readonly { title: string; text: string }[] };
   faq: { title: string; items: readonly { q: string; a: string }[] };
   vision: {
@@ -112,6 +117,7 @@ const en: HomeCopy = {
   integrations: {
     title: "The ideas are already in your day.",
     lead: "GINGGA connects the tools where you keep conversations, notes and reading, and finds starting points you would otherwise forget: an explanation you keep repeating, a good question, something you just learned.",
+    note: "Logos belong to their respective owners and are shown only to identify the tools you can connect.",
     groups: [
       {
         title: "Meetings and conversation notes",
@@ -237,6 +243,7 @@ const es: HomeCopy = {
   integrations: {
     title: "Las ideas ya están en tu día.",
     lead: "GINGGA se conecta con las herramientas donde guardas conversaciones, notas y lecturas, y encuentra puntos de partida que de otro modo olvidarías: una explicación que repites, una buena pregunta, algo que acabas de aprender.",
+    note: "Los logos pertenecen a sus respectivos dueños y se muestran solo para identificar las herramientas que puedes conectar.",
     groups: [
       {
         title: "Reuniones y notas de conversaciones",
