@@ -1,5 +1,6 @@
 import { DemoCta } from "../DemoCta";
 import { homeCopy, type Lang } from "@/data/home-copy";
+import { AgencyStrip } from "./AgencyStrip";
 import { ContentExample } from "./ContentExample";
 import { HomeFaq } from "./HomeFaq";
 import { HomeHero } from "./HomeHero";
@@ -22,6 +23,7 @@ export function HomeContent({ lang }: { lang: Lang }) {
       <Pricing lang={lang} />
       <HomeFaq lang={lang} />
       <Roadmap lang={lang} />
+      <AgencyStrip lang={lang} />
       <DemoCta title={cta.title} lead={cta.lead} label={cta.label} lang={lang} />
     </div>
   );

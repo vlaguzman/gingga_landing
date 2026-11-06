@@ -2,6 +2,7 @@ import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { homeCopy, type Lang } from "@/data/home-copy";
 import { demoHref } from "@/lib/demo";
+import { AgencyStrip } from "./AgencyStrip";
 import { ContentExample } from "./ContentExample";
 import { HomeContent } from "./HomeContent";
 import { HomeFaq } from "./HomeFaq";
@@ -23,6 +24,9 @@ describe("homeCopy", () => {
     expect(es.points.items).toHaveLength(en.points.items.length);
     expect(es.faq.items).toHaveLength(en.faq.items.length);
     expect(es.pricing.tiers.map((t) => t.price)).toEqual(en.pricing.tiers.map((t) => t.price));
+    expect(es.pricing.tiers.map((t) => t.unit.split("/").length)).toEqual(
+      en.pricing.tiers.map((t) => t.unit.split("/").length),
+    );
     expect(es.pricing.tiers.map((t) => t.features.length)).toEqual(en.pricing.tiers.map((t) => t.features.length));
     expect(es.vision.today).toHaveLength(en.vision.today.length);
     expect(es.vision.next).toHaveLength(en.vision.next.length);
@@ -85,7 +89,8 @@ describe.each(LANGS)("home sections (%s)", (lang) => {
     expect(within(container.querySelector(".plan--featured") as HTMLElement).getByRole("heading").textContent).toBe(
       c.pricing.tiers[1].name,
     );
-    expect(screen.getAllByText(c.pricing.perMonth)).toHaveLength(3);
+    for (const tier of c.pricing.tiers) expect(screen.getByText(tier.price)).toBeInTheDocument();
+    expect(screen.getAllByText(/\//)).toHaveLength(3);
     expect(screen.getByText(c.pricing.compare)).toBeInTheDocument();
   });
 
@@ -97,6 +102,15 @@ describe.each(LANGS)("home sections (%s)", (lang) => {
         demoHref(undefined, tier.name, lang),
       );
     }
+  });
+
+  it("agency strip is the #agencies target and books a partnership chat in the page language", () => {
+    const { container } = render(<AgencyStrip lang={lang} />);
+    expect(container.querySelector("section#agencies")).not.toBeNull();
+    expect(screen.getByRole("link", { name: c.agencies.cta })).toHaveAttribute(
+      "href",
+      demoHref(undefined, c.agencies.topic, lang),
+    );
   });
 
   it("faq renders closed disclosures", () => {

@@ -26,7 +26,7 @@ export function Pricing({ lang }: { lang: Lang }) {
               <div className="plan__price">
                 <div className="plan__amount">
                   <strong>{tier.price}</strong>
-                  <span>{pricing.perMonth}</span>
+                  <span>{tier.unit}</span>
                 </div>
               </div>
               <a

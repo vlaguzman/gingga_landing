@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { HomeContent } from "@/components/landing/home/HomeContent";
 
 export const metadata: Metadata = {
-  title: "GINGGA | Give a voice to your ideas and your experience",
+  title: "GINGGA | Give your business a face people trust",
   description:
-    "GINGGA connects to your meeting notes, reading and voice notes, finds the ideas worth sharing and turns them into LinkedIn drafts in your own voice.",
+    "GINGGA turns your team's meetings, notes and reading into LinkedIn posts for your personal profiles, in each person's own voice, so customers get to know and trust the people behind your business.",
   alternates: { canonical: "/", languages: { en: "/", es: "/es" } },
 };
 
