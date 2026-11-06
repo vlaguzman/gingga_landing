@@ -15,7 +15,7 @@ describe("LoginPage", () => {
     expect(screen.getByRole("link", { name: "GINGGA home" })).toHaveAttribute("href", "/");
     expect(screen.getByRole("link", { name: "See how it works" })).toHaveAttribute(
       "href",
-      "/#services",
+      "/crm-solution#services",
     );
     expect(screen.getByAltText("GINGGA")).toBeInTheDocument();
   });

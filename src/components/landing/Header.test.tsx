@@ -6,20 +6,53 @@ import { Header } from "./Header";
 const usePathname = vi.fn();
 vi.mock("next/navigation", () => ({ usePathname: () => usePathname() }));
 
-beforeEach(() => usePathname.mockReturnValue("/"));
+beforeEach(() => usePathname.mockReturnValue("/crm-solution"));
 
 const toggle = () => screen.getByRole("button", { name: /Use cases/ });
 const menu = () => document.getElementById("use-cases-menu")!;
 
 describe("Header", () => {
-  it("links home and to the home sections", () => {
+  it("links home and to the CRM solution sections", () => {
     render(<Header />);
     expect(screen.getByRole("link", { name: "GINGGA home" })).toHaveAttribute("href", "/");
-    expect(screen.getByRole("link", { name: "How it works" })).toHaveAttribute("href", "/#how-it-works");
-    expect(screen.getByRole("link", { name: "Services" })).toHaveAttribute("href", "/#services");
+    expect(screen.getByRole("link", { name: "How it works" })).toHaveAttribute("href", "/crm-solution#how-it-works");
+    expect(screen.getByRole("link", { name: "Services" })).toHaveAttribute("href", "/crm-solution#services");
   });
 
-  it("uses the generic booking link on the home page", () => {
+  it("shows a minimal home navigation, without the use-cases menu, on the home page", () => {
+    usePathname.mockReturnValue("/");
+    render(<Header />);
+    expect(screen.getByRole("link", { name: "How it works" })).toHaveAttribute("href", "/#how-it-works");
+    expect(screen.getByRole("link", { name: "Pricing" })).toHaveAttribute("href", "/#pricing");
+    for (const gone of ["Example", "Integrations", "Vision", "For sales teams"]) {
+      expect(screen.queryByRole("link", { name: gone })).toBeNull();
+    }
+    expect(screen.queryByRole("button", { name: /Use cases/ })).toBeNull();
+  });
+
+  it("shows the Spanish navigation, links and language switch on /es", () => {
+    usePathname.mockReturnValue("/es");
+    render(<Header />);
+    expect(screen.getByRole("link", { name: "GINGGA home" })).toHaveAttribute("href", "/es");
+    expect(screen.getByRole("link", { name: "Cómo funciona" })).toHaveAttribute("href", "/es#how-it-works");
+    expect(screen.getByRole("link", { name: "View this page in English" })).toHaveAttribute("href", "/");
+    expect(screen.getByRole("link", { name: "Reservar una demo" })).toHaveAttribute(
+      "href",
+      demoHref(undefined, undefined, "es"),
+    );
+  });
+
+  it("offers a switch to Spanish on the English home and none on CRM pages", () => {
+    usePathname.mockReturnValue("/");
+    const { unmount } = render(<Header />);
+    expect(screen.getByRole("link", { name: "Ver esta página en español" })).toHaveAttribute("href", "/es");
+    unmount();
+    usePathname.mockReturnValue("/crm-solution");
+    render(<Header />);
+    expect(screen.queryByRole("link", { name: "Ver esta página en español" })).toBeNull();
+  });
+
+  it("uses the generic booking link outside a sector", () => {
     render(<Header />);
     expect(screen.getByRole("link", { name: "Book a demo" })).toHaveAttribute("href", demoHref());
   });
